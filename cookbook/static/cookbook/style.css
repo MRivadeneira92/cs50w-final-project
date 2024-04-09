@@ -1,0 +1,17 @@
+/* layout */ 
+
+
+/* main page */
+
+#search-container {
+    margin: 0 auto;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* buttons */
+
+#btn-submit {
+    width: 120px;
+}

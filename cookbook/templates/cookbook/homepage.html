@@ -1,0 +1,26 @@
+{% extends "cookbook/layout.html" %}
+
+{% block body %}
+
+    <div id="search-container" class="d-flex">
+        <input type="text" id="data-input" class="bar-input" placeholder="Ej: chicken">
+        <div>
+            <input type="radio" id="submit-ingredients" name="ing-toggle" value="ingredients">
+            <label for="submit-ingredients">Ingredients</label>
+            <input type="radio" id="submit-recipes" name="ing-toggle" value="recipes">
+            <label for="submit-recipes">Recipes</label>
+            
+            <br>
+        </div>
+        <button type="button" id="btn-submit" class="btn-primary">Search</button>
+        <p id="data-message"></p>
+    </div>
+
+
+    <hr>
+    <h1>DEBUG</h1>
+    <div>
+        <p id="debug-ingredient-list"></p>
+        <label for="debug-ingredient-list">List of ingredients</label>
+    </div>
+{% endblock %}
