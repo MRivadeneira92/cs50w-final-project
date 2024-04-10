@@ -1,6 +1,8 @@
 /* layout */ 
 
-
+.btn {
+    width: 120px
+}
 /* main page */
 
 #search-container {
@@ -11,7 +13,3 @@
 }
 
 /* buttons */
-
-#btn-submit {
-    width: 120px;
-}

@@ -15,10 +15,15 @@ def results(request):
 
 def get_ingredients(request, name):
     # Check if ingredient exists
-    result = False
+    result = {}
     if (Ingredient.objects.filter(ingredient_name=name).exists()): 
-        result = True
-    print(f"result is {result}")
+        ingredient = Ingredient.objects.get(ingredient_name=name)
+        result["id"] = ingredient.id
+        result["name"] = ingredient.ingredient_name
+    return JsonResponse(result)
 
-    return JsonResponse({"result": result})
-
+def get_recipe(request, list):
+    ingredients = list.split(",")
+    hello = Recipe.objects.filter(recipe_ingredients=ingredients)
+    print(hello)
+    return HttpResponse(request, "cookbook/results.html")

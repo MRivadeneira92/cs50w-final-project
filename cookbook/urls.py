@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('results/', views.results, name='results'),
-    path('get_ingredients/<str:name>', views.get_ingredients)
+    path('get_ingredients/<str:name>', views.get_ingredients),
+    path('get_recipe/<str:list>', views.get_recipe)
 ]
