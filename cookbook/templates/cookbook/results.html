@@ -4,6 +4,10 @@
     <h2>What we found</h2>
     <hr>
     <div>
-        
+        <ul>
+            {% for recipe in result %}
+            <li>{{recipe}}</li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}

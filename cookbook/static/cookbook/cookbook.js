@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch(`/get_ingredients/${dataInput.value}`)
             .then(response => response.json())
             .then(response => {
-                console.log(response)
                 if (Object.keys(response).length === 0) {
                     document.querySelector('#data-message').innerHTML = 'No ingredient found';
                 }
@@ -38,7 +37,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnSubmit.addEventListener('click', () => {
         fetch(`/get_recipe/${ingredientIdList}`)
+        .then(response => response.json())
+        .then(list => {
+            console.log(list[0]['recipe_name']);
+            document.querySelector('#results-container').innerHTML = recipeContainer(list[0]);
+        })
     })
 })
 
-
+function recipeContainer(dict) {
+    let container = 
+        `<div class='result-cell'>
+            <div class='result-img-container'>
+                <img src='https://restaurantden.wpenginepowered.com/wp-content/uploads/2017/09/free-stock-food-photography-websites.jpg' alt='food placeholder'> 
+            </div>
+            <div>
+                <p class='result-name' >${dict['recipe_name']}</p>
+                <p class='result-description'>${dict-['recipe_steps']}</p>
+            </div>
+        </div>
+        `
+}
