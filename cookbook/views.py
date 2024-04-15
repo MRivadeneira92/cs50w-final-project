@@ -56,7 +56,7 @@ def get_recipe(request, list):
             "steps": str(recipe_query[i].steps)
         }
         result[i] = recipe
-        print(type(result))
+        print(result)
 
 
     return JsonResponse(result)
