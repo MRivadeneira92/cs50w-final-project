@@ -39,10 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`/get_recipe/${ingredientIdList}`)
         .then(response => response.json())
         .then(list => {
-            console.log(list);
+            document.querySelector('#results-container').innerHTML = '<h2>This is what we found</h2><button class="btn btn-primary" onclick="clearContainer()">Clear</button>' + 
+            '<div id="results-cell-container" class="d-flex flex-row"></div>';
             var numResults= Object.keys(list).length;
             for (let i = 0; i < numResults; i++) {
-                document.querySelector('#results-container').innerHTML += recipeContainer(list[i]);
+                document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
             }
         })
     })
@@ -63,3 +64,6 @@ function recipeContainer(dict) {
     return container
 }
 
+function clearContainer() {
+    document.querySelector("#results-cell-container").innerHTML = "";
+}

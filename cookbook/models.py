@@ -26,5 +26,5 @@ class Recipe(models.Model):
     steps = models.TextField(max_length=400)
 
     def __str__(self):
-        return self.recipe_name
+        return f"{self.id}: {self.recipe_name}"
 

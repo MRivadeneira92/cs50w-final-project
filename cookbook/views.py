@@ -7,9 +7,15 @@ from .models import Ingredient, Recipe, Ingredient_type, Recipe_type
 def index(request):
     return render(request, "cookbook/homepage.html")
 
-def results(request):
-        
-    return render(request, "cookbook/results.html")
+def recipe_page(request, id, name):
+    if (Recipe.objects.filter(id=id).exists()):
+        recipe = Recipe.objects.get(id=id)
+    else: 
+        return render(request, "cookbook/not-found.html")
+    
+    return render(request, "cookbook/recipe.html", {
+        "recipe": recipe
+    })
 
 # API
 
@@ -57,6 +63,5 @@ def get_recipe(request, list):
         }
         result[i] = recipe
         print(result)
-
 
     return JsonResponse(result)
