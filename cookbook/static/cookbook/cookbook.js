@@ -45,6 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < numResults; i++) {
                 document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
             }
+
+            /* Trigger animation on cell when mouseout  */
+            document.querySelectorAll('.result-cell').forEach(cell => {
+                console.log(cell);
+                cell.addEventListener('mouseleave', (event) => {
+                    cell.classList.add('out');
+                })
+            })
         })
     })
 })
