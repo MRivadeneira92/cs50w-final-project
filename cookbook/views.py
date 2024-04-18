@@ -14,7 +14,8 @@ def recipe_page(request, id, name):
         return render(request, "cookbook/not-found.html")
     
     return render(request, "cookbook/recipe.html", {
-        "recipe": recipe
+        "recipe": recipe,
+        "ingredients": recipe.recipe_ingredients.values()
     })
 
 # API
@@ -56,6 +57,7 @@ def get_recipe(request, list):
         recipe_type = recipe_query[i].recipe_type.values()
         
         recipe = {
+            "recipe_id": recipe_query[i].id,
             "recipe_name": str(recipe_query[i].recipe_name),
             "recipe_ingredients": ingredients,
             "recipe_type": str(recipe_type[0]["re_type_name"]),

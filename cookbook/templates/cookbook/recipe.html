@@ -1,17 +1,21 @@
 {% extends 'cookbook/layout.html' %}
 
 {% block body %}
-    <div id="recipe-image">
-        <img src="" alt="image of food">
+    <div class="content-container">
+        <div id="recipe-image">
+            <img src="" alt="image of food">
+        </div>
+        <div id="recipe-ingredients">
+            <h2>{{recipe.recipe_name}}</h2>
+            <ul>
+                {% for ingredient in ingredients %}
+                <li>{{ingredient.ingredient_name}}</li>
+                {% endfor %} 
+            </ul>
+        </div>
+        <div id="recipe-steps">
+            <p class="recipe-text">{{ recipe.steps }}</p>
+        </div>
     </div>
-    <div id="recipe-ingredients">
-        <ul>
-            {% for ingredient in ingredients %}
-            <li></li>
-            {% endfor %} 
-        </ul>
-    </div>
-    <div id="recipe-steps">
-        <p class="recipe-text">{{ recipe.steps }}</p>
-    </div>
+    
 {% endblock %}

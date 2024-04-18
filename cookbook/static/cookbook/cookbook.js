@@ -51,16 +51,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function recipeContainer(dict) {
     let container = 
-        `<div class='result-cell'>
-            <a href=#>
-                <div class='result-img-container'>
+        `<div class='cell-container'>
+            <div class='result-cell'>
+                <a href='/${dict['recipe_id']}/hey'>
+                    <div class='result-img-container'>
+                    </div>
+                    <div>
+                        <p class='result-name' >${dict['recipe_name']}</p>
+                        <p class='result-description'>${dict['steps']}</p>
+                    </div>
+                    </a>
                 </div>
-                <div>
-                    <p class='result-name' >${dict['recipe_name']}</p>
-                    <p class='result-description'>${dict['steps']}</p>
-                </div>
-                </a>
-            </div>`
+        </div>`
     return container
 }
 
