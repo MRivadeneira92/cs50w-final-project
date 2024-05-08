@@ -58,6 +58,7 @@ def get_recipe(request, list):
         
         recipe = {
             "recipe_id": recipe_query[i].id,
+            "recipe_desc": recipe_query[i].recipe_description,
             "recipe_name": str(recipe_query[i].recipe_name),
             "recipe_ingredients": ingredients,
             "recipe_type": str(recipe_type[0]["re_type_name"]),

@@ -39,9 +39,17 @@
 .result-cell {
     border: 1px solid black;
     border-radius: 5px;
-    height: 219px;
-    padding: 1rem;
+    /* height: 219px; */
+    padding: 1rem; 
     overflow: clip;
+}
+
+.result-name {
+    margin-bottom: 1rem;
+}
+
+.result-description {
+    margin-bottom: 0;
 }
 
 .result-cell a {
