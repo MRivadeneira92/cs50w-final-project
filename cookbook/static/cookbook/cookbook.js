@@ -42,26 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(dataList);
 
             /* search ingredients */
-
-            fetch(`/get_ingredients/${ingName}`)
-            .then(response => response.json())
-            .then(response => {
-                if (Object.keys(response).length === 0) {
-                    document.querySelector('#data-message').innerHTML = 'No ingredient found';
+            if (dataList.length > 0){
+                console.log("hey")
+                for (let i = 0; i < dataList.length; i++){
+                    getIngredient(dataList[i]);
                 }
-                else {
-                    if (!ingredientIdList.includes(response['id'])) { 
-                        ingredientIdList.push(response['id']);
-                        ingredientNameList.push(response['name'])
-                        dataInput.value = "";
-                        
-                        /* debug */ 
-                        document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
-                        console.log(`Ingredient ids are ${ingredientIdList}`);
-                    }
-                    
-                }
-            })
+            }
+            else{
+                getIngredient(ingName);
+            }
         }  
     }); 
 
@@ -121,4 +110,26 @@ function makeUpper(string) {
         }
     } 
     return result;
+}
+
+function getIngredient(string){
+    fetch(`/get_ingredients/${string}`)
+            .then(response => response.json())
+            .then(response => {
+                if (Object.keys(response).length === 0) {
+                    document.querySelector('#data-message').innerHTML = 'No ingredient found';
+                }
+                else {
+                    if (!ingredientIdList.includes(response['id'])) { 
+                        ingredientIdList.push(response['id']);
+                        ingredientNameList.push(response['name'])
+                        document.querySelector('#data-input').value = "";
+                        
+                        /* debug */ 
+                        document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
+                        console.log(`Ingredient ids are ${ingredientIdList}`);
+                    }
+                    
+                }
+            })
 }
