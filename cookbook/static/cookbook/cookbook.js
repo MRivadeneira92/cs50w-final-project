@@ -66,6 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < numResults; i++) {
                 document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
             }
+            setTimeout(() => {
+                var cells = document.querySelectorAll(".cell-container");
+                cells.forEach((cell)=> {
+                    cell.classList.remove("fade-in");
+                })
+            }, 600)
 
             /* Trigger animation on cell when mouseout  */
             document.querySelectorAll('.result-cell').forEach(cell => {
@@ -80,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function recipeContainer(dict) {
     let container = 
-        `<div class='cell-container'>
+        `<div class='cell-container fade-in'>
             <div class='result-cell'>
                 <a href='/${dict['recipe_id']}/hey'>
                     <div class='result-img-container'>
