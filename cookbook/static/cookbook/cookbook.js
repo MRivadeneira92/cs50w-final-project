@@ -84,6 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 })
 
+/* info menu */
+
+document.querySelector("#info-toggle").addEventListener("click", () => {
+    console.log("hey");
+    document.querySelector("#info-text").style.display = inline;
+})
+
 function recipeContainer(dict) {
     let container = 
         `<div class='cell-container fade-in'>

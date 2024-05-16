@@ -21,7 +21,7 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     recipe_name = models.CharField(max_length=100)
-    recipe_description = models.CharField(max_length=100)
+    recipe_description = models.CharField(max_length=60)
     recipe_ingredients = models.ManyToManyField(Ingredient, blank=True)
     recipe_type = models.ManyToManyField(Recipe_type)
     steps = models.TextField(max_length=1000)

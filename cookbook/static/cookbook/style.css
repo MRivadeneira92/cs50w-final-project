@@ -1,8 +1,15 @@
+* {
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 /* layout */ 
 
 .btn {
     width: 120px
 }
+
 /* main page */
 .content-container {
     max-width: 892px;
@@ -27,31 +34,39 @@
     animation: bar-focus 0.5s forwards;
 }
 
+/* info div */
+
+#info-toggle p {
+    font-weight: bold;
+}
+
+#info-toggle:hover {
+    cursor: pointer;
+}
+
+#info-text {
+    display: none; 
+}
+
 /* buttons */
 
 /* recipe cell */
 .cell-container {
     padding: 1rem;
-    border: 1px solid black;
+    border: 1px solid lightblue;
     width: 216px;
     height: 235px;
+    transition: padding 0.5s;
+}
 
+.cell-container:hover {
+    padding: 0;
 }
 
 .fade-in {
     animation-name: results-fadein;
     animation-duration: 1s;
     animation-fill-mode: forwards;
-}
-
-.cell-container:hover {
-    animation-name: cell-hover;
-    animation-duration: 0.5s;
-    animation-fill-mode: forwards;
-}
-
-.out {
-    animation-name: cell-hover-out 0.5s forwards;
 }
 
 .result-cell {
@@ -81,26 +96,6 @@
 }
 
 /* animations */
-
-@keyframes cell-hover {
-    0% {
-        padding: 1rem;
-    }
-
-    100% {
-        padding: 0;
-    }
-}
-
-@keyframes cell-hover-out {
-    0% {
-        padding: 0;
-    }
-
-    100% {
-        padding: 1rem;
-    }
-}
 
 @keyframes results-fadein {
     0% {
