@@ -41,14 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
             else {
                 ingName = makeUpper(dataInput.value);
             }
-            console.log("ingName is: " + ingName);
-            console.log("dataList is: " + dataList);
 
             /* check searchSwitch state */
             if (document.querySelector("#opt-checkbox").checked == true) {
                 searchSwitch = 1; 
             }
-            console.log("searchSwitch is: " + searchSwitch);
 
             if (searchSwitch == 0) {
                 console.log("yo")
@@ -164,13 +161,11 @@ function getIngredient(string, switchOpt){
                     if (!ingredientIdList.includes(response['id'])) { 
                         ingredientIdList.push(response['id']);
                         ingredientNameList.push(response['name']);
-                        console.log(ingredientContainer(string));
                         document.querySelector("#ingredients-result").innerHTML += ingredientContainer(string,response['id']);
                         document.querySelector('#data-input').value = "";
                         
                         /* debug */ 
                         document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
-                        console.log(`Ingredient ids are ${ingredientIdList}`);
                     }
                     
                 }
@@ -185,7 +180,7 @@ function showInfo(){
 }
 
 function ingredientContainer(name, id){ 
-    var html = `<div class="ing-container" onClick="deleteIngredient(${id})">
+    var html = `<div class="ing-container" onClick="deleteIngredient(${id})" id="ing-${id}">
                     <p>${name}</p>
                     <span> x</span>
                 </div>`
@@ -195,4 +190,5 @@ function ingredientContainer(name, id){
 function deleteIngredient(id) {
     let position = ingredientIdList.indexOf(id);
     ingredientIdList.splice(position);
+    document.querySelector(`#ing-${id}`).remove();
 }
