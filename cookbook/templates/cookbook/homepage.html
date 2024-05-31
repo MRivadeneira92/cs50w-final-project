@@ -4,12 +4,13 @@
     <div class="content-container">
         <div id="search-container" class="d-flex">
             <input type="text" id="data-input" class="bar-input" placeholder="Ej: chicken">
-            <div>
-                <input type="radio" id="submit-ingredients" name="ing-toggle" value="ingredients">
-                <label for="submit-ingredients">Ingredients</label>
-                <input type="radio" id="submit-recipes" name="ing-toggle" value="recipes">
-                <label for="submit-recipes">Recipes</label>
-                
+            <div id="search-slider" class="d-flex">
+                <p id="opt-ingredient">Ingredient</p>
+                <label class="switch">
+                    <input type="checkbox" id="opt-checkbox">
+                    <span class="slider round" id="opt-slider"></span>
+                </label>
+                <p id="opt-recipe">Recipe</p>
                 <br>
             </div>
             <div class="d-flex flex-row justify-content-between">
@@ -20,10 +21,14 @@
         </div>
         <div id="info">
             <div id="info-toggle">
-                <img src="" alt="">
-                <p>How do I use this?</p>
+                <span>&#x3e</span><label for="info-text">How do I use this page?</label>
+                <p id="info-text"> Use this page to find what to cook depending on what you have available. You can search for ingredients either 
+                    one at a time or separated by a comma (,). You can also look for specific recipes by selecting "recipe" under the search bar.
+                    Recipe only takes one option for now. Results will be displayed in cards below with a small description. Click on the card to see the full recipe.</p>
             </div>
-            <p id="info-text">Hello</p>
+        </div>
+        <div id="ingredients-result">
+
         </div>
         <div id="results-container">
             

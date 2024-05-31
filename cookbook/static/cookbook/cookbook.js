@@ -1,8 +1,10 @@
 let ingredientIdList = []
 let ingredientNameList = []
+let infoDisplay = false;
+let searchSwitch = 0; /* 0 == ingredient; 1 == recipe */
 
 document.addEventListener('DOMContentLoaded', () => {
-
+    var infoContainer = document.querySelector("#info-toggle");
     var btnSearch = document.querySelector('#btn-search');
     var btnSubmit = document.querySelector('#btn-submit');
     
@@ -39,18 +41,28 @@ document.addEventListener('DOMContentLoaded', () => {
             else {
                 ingName = makeUpper(dataInput.value);
             }
-            console.log(dataList);
+            console.log("ingName is: " + ingName);
+            console.log("dataList is: " + dataList);
 
-            /* search ingredients */
-            if (dataList.length > 0){
-                console.log("hey")
-                for (let i = 0; i < dataList.length; i++){
-                    getIngredient(dataList[i]);
+            /* check searchSwitch state */
+            if (document.querySelector("#opt-checkbox").checked == true) {
+                searchSwitch = 1; 
+            }
+            console.log("searchSwitch is: " + searchSwitch);
+
+            if (searchSwitch == 0) {
+                console.log("yo")
+                /* search ingredients */
+                if (dataList.length > 0){
+                    console.log("hey")
+                    for (let i = 0; i < dataList.length; i++){
+                        getIngredient(dataList[i],searchSwitch);
+                    }
                 }
-            }
-            else{
-                getIngredient(ingName);
-            }
+                else{
+                    getIngredient(ingName,searchSwitch);
+                }
+            }            
         }  
     }); 
 
@@ -75,20 +87,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
             /* Trigger animation on cell when mouseout  */
             document.querySelectorAll('.result-cell').forEach(cell => {
-                console.log(cell);
                 cell.addEventListener('mouseleave', (event) => {
                     cell.classList.add('out');
                 })
             })
         })
     })
-})
 
-/* info menu */
+    /* slider */
 
-document.querySelector("#info-toggle").addEventListener("click", () => {
-    console.log("hey");
-    document.querySelector("#info-text").style.display = inline;
+    document.querySelector("#opt-ingredient").addEventListener("click", () => {
+        document.querySelector("#opt-slider").click();
+    })
+
+
+    /* info menu */
+
+    document.querySelector("#info-toggle").addEventListener("click", () => {
+        
+        const infoConSize = infoContainer.offsetHeight;
+        var text = document.querySelector("#info-text");
+        text.classList.toggle("show");
+        if (infoDisplay == false) {
+            infoDisplay = true;
+            infoContainer.style.height = (infoConSize + text.offsetHeight) + "px";
+        } else {
+            infoContainer.style.height = "48px";
+            infoDisplay = false;
+        }
+    })
+
 })
 
 function recipeContainer(dict) {
@@ -125,8 +153,8 @@ function makeUpper(string) {
     return result;
 }
 
-function getIngredient(string){
-    fetch(`/get_ingredients/${string}`)
+function getIngredient(string, switchOpt){
+    fetch(`/get_ingredients/${string}/${switchOpt}`)
             .then(response => response.json())
             .then(response => {
                 if (Object.keys(response).length === 0) {
@@ -135,7 +163,9 @@ function getIngredient(string){
                 else {
                     if (!ingredientIdList.includes(response['id'])) { 
                         ingredientIdList.push(response['id']);
-                        ingredientNameList.push(response['name'])
+                        ingredientNameList.push(response['name']);
+                        console.log(ingredientContainer(string));
+                        document.querySelector("#ingredients-result").innerHTML += ingredientContainer(string,response['id']);
                         document.querySelector('#data-input').value = "";
                         
                         /* debug */ 
@@ -145,4 +175,24 @@ function getIngredient(string){
                     
                 }
             })
+}
+
+function showInfo(){
+    var infoText = document.querySelector("#info-text");
+    infoText.removeAttribute("hidden");
+    const reflow = element.offsetHeigth;
+    infoText.classList.add("showInfo");
+}
+
+function ingredientContainer(name, id){ 
+    var html = `<div class="ing-container" onClick="deleteIngredient(${id})">
+                    <p>${name}</p>
+                    <span> x</span>
+                </div>`
+    return html;
+}
+
+function deleteIngredient(id) {
+    let position = ingredientIdList.indexOf(id);
+    ingredientIdList.splice(position);
 }

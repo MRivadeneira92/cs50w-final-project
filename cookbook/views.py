@@ -20,13 +20,21 @@ def recipe_page(request, id, name):
 
 # API
 
-def get_ingredients(request, name):
-    # Check if ingredient exists
+def get_ingredients(request, name, switch):
     result = {}
-    if (Ingredient.objects.filter(ingredient_name=name).exists()): 
-        ingredient = Ingredient.objects.get(ingredient_name=name)
-        result["id"] = ingredient.id
-        result["name"] = ingredient.ingredient_name
+    print(switch)
+    if (switch == 0):
+        # Check if ingredient exists
+        if (Ingredient.objects.filter(ingredient_name=name).exists()): 
+            ingredient = Ingredient.objects.get(ingredient_name=name)
+            result["id"] = ingredient.id
+            result["name"] = ingredient.ingredient_name 
+    else:
+        # Check if recipe exist 
+        if(Recipe.objects.filter(recipe_name=name).exists()):
+            recipe = Recipe.objects.get(recipe_name=name)
+            result["id]"] = recipe.id
+            result["name"] = recipe.recipe_name
     return JsonResponse(result)
 
 def get_recipe(request, list):
