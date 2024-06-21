@@ -2,18 +2,70 @@
     margin:0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "roboto";
 }
 
 p {
     margin-bottom: 0 !important;
 }
+
+html, body {
+    height: 100%;
+}
+
+a {
+    color: black;
+}
 /* layout */ 
 
-.btn {
-    width: 120px
+.button-style {
+    width: 120px;
+    border-radius: 20px ;
+    background-color: #e2eafc ;
+    color: black;
+    border: gray;
+    transition: background-color 0.5s;
+    padding: 0.3rem;
+}
+
+.button-style:hover{
+    background-color:#ccdbfd;
 }
 
 /* main page */
+
+/* body {
+    background-image: url("/static/cookbook/table-background.jpg");
+    background-size: cover;
+    background-position: center;
+} */
+
+.bar-input {
+    padding: 0.5rem;
+    border-radius: 20px;
+    border: 1px solid grey;
+    transition: border  0.2s;
+    margin-bottom: 0.25rem;
+}
+
+.bar-input:focus {
+    outline: none;
+    border: 1px solid black;
+}
+
+body {
+    /*background-image: linear-gradient(112.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(157.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(135deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(90deg, rgb(195, 195, 195),rgb(228, 228, 228)); background-blend-mode:overlay,overlay,overlay,normal;
+*/
+    background: #edf2fb;
+    }
+
+#buttons-container {
+    margin-top: 0.65rem;
+}
+
+.container {
+    background-color: transparent;
+}
 
 .content-container {
     max-width: 892px;
@@ -22,21 +74,17 @@ p {
 
 #search-container {
     margin: 0 auto;
+    margin-top: 2rem;
     max-width: 800px;
     display: flex;
     flex-direction: column;
 }
 
-.bar-input {
-    padding: 0.5rem;
-    border-radius: 20px;
-    border: 1px solid grey;
-    transition: border  0.2s;
-}
-
-.bar-input:focus {
-    outline: none;
-    border: 1px solid black;
+#title {
+    text-align: center;
+    margin-top: 2rem;
+    font-size:2.5rem;
+    letter-spacing: 0.25rem;
 }
 
 /* slider */ 
@@ -137,7 +185,8 @@ border-radius: 50%;
 
 #ingredients-result {
     display: flex;
-    height: 43px;
+    flex-wrap: wrap;
+    height: auto;
 }
 
 .ing-container {
@@ -147,14 +196,24 @@ border-radius: 50%;
     display: flex;
     padding: 5px 1rem;
     border-radius: 20px;
-    margin: 0 2px;
-    transition: padding 0.3s;
+    margin: 2px;
+    transition: padding 0.3s, opacity 0.3s;
     cursor: pointer;
+    opacity: 1;
 }
+
+.show {
+    visibility: visible !important;
+}
+
 
 .ing-container:hover {
     padding: 8px 1.5rem;
 
+}
+
+.fade-out {
+    opacity: 0;
 }
 
 .ing-container span {
@@ -162,16 +221,12 @@ border-radius: 50%;
     font-size: 12px;
 }
 
-.show {
-    visibility: visible !important;
-}
-
 /* buttons */
 
 /* recipe cell */
 .cell-container {
     padding: 1rem;
-    border: 1px solid lightblue;
+    /*outline: 1px solid lightblue; */
     width: 216px;
     height: 235px;
     transition: padding 0.5s;
@@ -194,10 +249,20 @@ border-radius: 50%;
     padding: 1rem; 
     overflow: clip;
     text-align: center;
+    color: black;
+    box-shadow: 2px 2px 2px (0, 0, 0, 0.2);
+    transition: padding 0.5s, font-size 0.5s;
+}
+
+.result-cell:hover{
+    padding: 1.8rem;
+    font-size: 1.2rem;
 }
 
 .result-name {
     margin-bottom: 1rem;
+    font-style: italic;
+    font-size: 1.05rem;
 }
 
 .result-description {

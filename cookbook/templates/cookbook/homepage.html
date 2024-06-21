@@ -1,44 +1,50 @@
 {% extends "cookbook/layout.html" %}
-
+{% load static %}
 {% block body %}
-    <div class="content-container">
-        <div id="search-container" class="d-flex">
-            <input type="text" id="data-input" class="bar-input" placeholder="Ej: chicken">
-            <div id="search-slider" class="d-flex">
-                <p id="opt-ingredient">Ingredient</p>
-                <label class="switch">
-                    <input type="checkbox" id="opt-checkbox">
-                    <span class="slider round" id="opt-slider"></span>
-                </label>
-                <p id="opt-recipe">Recipe</p>
-                <br>
-            </div>
-            <div class="d-flex flex-row justify-content-between">
-                <button type="button" id="btn-search" class="btn btn-primary">Search</button>
-                <button type="button" id="btn-submit" class="btn btn-primary">Submit</button>
-            </div>
-            <p id="data-message"></p>
+    <header id="title">
+        <h1>The Missing Ingredient's Cookbook</h1>
+    </header>
+    <section id="search-container" class="d-flex">
+        <input type="text" id="data-input" class="bar-input" placeholder="Ej: chicken">
+        <div id="search-slider" class="d-flex">
+            <p id="opt-ingredient">Ingredient</p>
+            <label class="switch">
+                <input type="checkbox" id="opt-checkbox">
+                <span class="slider round" id="opt-slider"></span>
+            </label>
+            <p id="opt-recipe">Recipe</p>
+            <br>
         </div>
-        <div id="info">
-            <div id="info-toggle">
-                <span>&#x3e</span><label for="info-text">How do I use this page?</label>
-                <p id="info-text"> Use this page to find what to cook depending on what you have available. You can search for ingredients either 
-                    one at a time or separated by a comma (,). You can also look for specific recipes by selecting "recipe" under the search bar.
-                    Recipe only takes one option for now. Results will be displayed in cards below with a small description. Click on the card to see the full recipe.</p>
-            </div>
+        <div id="buttons-container" class="d-flex flex-row justify-content-between">
+            <button type="button" id="btn-search" class="button-style">Search</button>
+            <button type="button" id="btn-submit" class="button-style">Submit</button>
         </div>
+        <p id="data-message"></p>
+    </section>
+    <section >
+        <h3>Ingredients</h3>
         <div id="ingredients-result">
 
         </div>
-        <div id="results-container">
-            
+    </section>
+    <section id="results-container">
+        
+    </section>
+    <section id="info">
+        <div id="info-toggle">
+            <span>&#x3e</span><label for="info-text">How do I use this page?</label>
+            <p id="info-text"> Use this page to find what to cook depending on what you have available. You can search for ingredients either 
+                one at a time or separated by a comma (,). You can also look for specific recipes by selecting "recipe" under the search bar.
+                Recipe only takes one option for now. Results will be displayed in cards below with a small description. Click on the card to see the full recipe.</p>
         </div>
-    
-        <hr>
-        <h1>DEBUG</h1>
-        <div>
-            <p id="debug-ingredient-list"></p>
-            <label for="debug-ingredient-list">List of ingredients</label>
-        </div>
+    </section>
+
+
+    <hr>
+    <h1>DEBUG</h1>
+    <div>
+        <p id="debug-ingredient-list"></p>
+        <label for="debug-ingredient-list">List of ingredients</label>
+        <p id="list for wrap">Rice,Whole chicken,Salt,Lemon,Croutons,Tomato,Olive oil,Lettuce,Pasta,Kosher salt,Regular salt,Egg,Potato,Lemon juice</p>
     </div>
 {% endblock %}

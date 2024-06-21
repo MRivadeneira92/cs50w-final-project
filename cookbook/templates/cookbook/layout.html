@@ -10,21 +10,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <nav>
-            <div>
-                <h1>Cookbook</h1>
-            </div>
-            <div>
-                <ul>
-                    <li>
-                        <a href="{% url 'index' %}">Home</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div class="body">
+        <main class="container">
             {% block body %}
             {% endblock%}
-        </div>
+        </main>
     </body>
 </html>

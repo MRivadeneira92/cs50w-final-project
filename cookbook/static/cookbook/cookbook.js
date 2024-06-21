@@ -13,14 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSearch.addEventListener('click', () => {
         var dataInput = document.querySelector('#data-input');
         var ingName = "";
-
         if (dataInput.value != "") {
             var dataList = []
             /* check for multiple ingredients on input */
             if (dataInput.value.includes(",") || dataInput.value.includes(", ")){
                 let foo = ""
                 for (let i = 0; i <= dataInput.value.length; i++){
-                    if (dataInput.value[i] == " "){
+                    if (dataInput.value[i] == " " && dataInput.value[i + 1] == ","){
                         continue;
                     }
                     if (dataInput.value[i] != ","){
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } 
                     else {
                         dataList.push(makeUpper(foo));
-                        if(dataInput.value[i] == " ") {
+                        if(dataInput.value[i + 1] == " ") {
                             i++;
                         }
                         foo = "";
@@ -48,10 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (searchSwitch == 0) {
-                console.log("yo")
                 /* search ingredients */
                 if (dataList.length > 0){
-                    console.log("hey")
+                    console.log(dataList);
                     for (let i = 0; i < dataList.length; i++){
                         getIngredient(dataList[i],searchSwitch);
                     }
@@ -69,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`/get_recipe/${ingredientIdList}`)
         .then(response => response.json())
         .then(list => {
-            document.querySelector('#results-container').innerHTML = '<h2>This is what we found</h2><button class="btn btn-primary" onclick="clearContainer()">Clear</button>' + 
+            document.querySelector('#results-container').innerHTML = '<h2>This is what we found</h2><button class="button-style" onclick="clearContainer()">Clear</button>' + 
             '<div id="results-cell-container" class="d-flex flex-row"></div>';
             var numResults= Object.keys(list).length;
             for (let i = 0; i < numResults; i++) {
@@ -83,11 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 600)
 
             /* Trigger animation on cell when mouseout  */
-            document.querySelectorAll('.result-cell').forEach(cell => {
+           /* document.querySelectorAll('.result-cell').forEach(cell => {
                 cell.addEventListener('mouseleave', (event) => {
                     cell.classList.add('out');
                 })
-            })
+            })*/
         })
     })
 
@@ -123,7 +121,7 @@ function recipeContainer(dict) {
                 <a href='/${dict['recipe_id']}/hey'>
                     <div class='result-img-container'>
                     </div>
-                    <div>
+                    <div class='result-text'>
                         <p class='result-name' >${dict['recipe_name']}</p>
                         <p class='result-description'>${dict['recipe_desc']}</p>
                     </div>
@@ -190,5 +188,9 @@ function ingredientContainer(name, id){
 function deleteIngredient(id) {
     let position = ingredientIdList.indexOf(id);
     ingredientIdList.splice(position);
-    document.querySelector(`#ing-${id}`).remove();
+    document.querySelector(`#ing-${id}`).classList.add("fade-out");
+    setTimeout(()=> {
+        document.querySelector(`#ing-${id}`).remove();
+    },1000);
+
 }
