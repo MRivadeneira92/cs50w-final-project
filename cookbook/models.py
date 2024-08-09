@@ -29,3 +29,6 @@ class Recipe(models.Model):
     def __str__(self):
         return f"{self.id}: {self.recipe_name}"
 
+class Ammount (models.Model):
+    id = models.ForeignKey(Recipe, on_delete=models.CASCADE, primary_key=True)
+    measure = models.CharField(blank=False, max_length=1000)

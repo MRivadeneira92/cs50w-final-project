@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (searchSwitch == 0) {
                 /* search ingredients */
                 if (dataList.length > 0){
-                    console.log(dataList);
                     for (let i = 0; i < dataList.length; i++){
                         getIngredient(dataList[i],searchSwitch);
                     }
@@ -57,8 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 else{
                     getIngredient(ingName,searchSwitch);
                 }
-            }            
-        }  
+            }           
+        } 
+        console.log("Ingredient list is " + ingredientIdList);  
     }); 
 
     /* submit list for searching recipe */ 
@@ -67,18 +67,25 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`/get_recipe/${ingredientIdList}`)
         .then(response => response.json())
         .then(list => {
-            document.querySelector('#results-container').innerHTML = '<h2>This is what we found</h2><button class="button-style" onclick="clearContainer()">Clear</button>' + 
-            '<div id="results-cell-container" class="d-flex flex-row"></div>';
-            var numResults= Object.keys(list).length;
-            for (let i = 0; i < numResults; i++) {
-                document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
+            console.log("response is" + list)
+            if(list["recipe_id"] == "None") {
+                document.querySelector("#results-cell-container").innerHTML = `<div id="results-info">No results<button class="button-style" onclick="clearContainer()">Clear</button></div>`
             }
-            setTimeout(() => {
-                var cells = document.querySelectorAll(".cell-container");
-                cells.forEach((cell)=> {
-                    cell.classList.remove("fade-in");
-                })
-            }, 600)
+            else {
+                document.querySelector('#results-container').innerHTML += `<div id="results-info"><h2>This is what we found</h2>
+                <button class="button-style" onclick="clearContainer()">Clear</button></div>`;
+                var numResults= Object.keys(list).length;
+                for (let i = 0; i < numResults; i++) {
+                    document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
+                }
+                setTimeout(() => {
+                    var cells = document.querySelectorAll(".cell-container");
+                    cells.forEach((cell)=> {
+                        cell.classList.remove("fade-in");
+                    })
+                }, 600)
+            }
+            
 
             /* Trigger animation on cell when mouseout  */
            /* document.querySelectorAll('.result-cell').forEach(cell => {
@@ -132,7 +139,10 @@ function recipeContainer(dict) {
 }
 
 function clearContainer() {
-    document.querySelector("#results-cell-container").innerHTML = "";
+    if(document.querySelector("#results-cell-container") != null){
+        document.querySelector("#results-cell-container").innerHTML ="";
+    }
+    document.querySelector("#results-info").remove();
 }
 
 function makeUpper(string) {
@@ -164,6 +174,7 @@ function getIngredient(string, switchOpt){
                         
                         /* debug */ 
                         document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
+                        document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
                     }
                     
                 }

@@ -1,0 +1,44 @@
+{% extends "cookbook/layout.html" %}
+
+{% block body %}
+    <section id="new-container">
+        <h2>Add a new recipe</h2>
+        <form action="">
+            <div>
+                <label for="new-recipe-name" class="new-label">Name</label>
+                <input type="text" id="new-recipe-name">
+            </div>
+            <div>
+                <label for="new-recipe-description" class="new-label">Description</label>
+                <input type="text" id="new-recipe-description">
+            </div>
+            <div>
+                <div id="new-ingr-grid-container">
+                    <p>Amount</p>
+                    <p>Ingredient</p>
+                    <input type="text" id="new-recipe-ingr-0" class="ing-amount">
+                    <input type="text" id="new-recipe-ingr-name-0">
+                    <input type="text" id="new-recipe-ingr-1" class="ing-amount">
+                    <input type="text" id="new-recipe-ingr-name-1">
+                    <input type="text" id="new-recipe-ingr-2" class="ing-amount">
+                    <input type="text" id="new-recipe-ingr-name-2">
+                    <input type="text" id="new-recipe-ingr-3" class="ing-amount">
+                    <input type="text" id="new-recipe-ingr-name-3">
+                </div>
+                <div id="new-ingr-titles">
+
+                </div>
+                <div>
+
+                </div>
+
+                <p>+</p>
+            </div>
+            <div style="display:flex;flex-direction: column;">
+                <label for="new-recipe-steps" class="new-label">Steps</label>
+                <input type="text" id="new-recipe-steps">
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+{% endblock %}

@@ -22,7 +22,6 @@ def recipe_page(request, id, name):
 
 def get_ingredients(request, name, switch):
     result = {}
-    print(switch)
     if (switch == 0):
         # Check if ingredient exists
         if (Ingredient.objects.filter(ingredient_name=name).exists()): 
@@ -47,10 +46,16 @@ def get_recipe(request, list):
     # Filter results 
     recipe_query = Recipe.objects.all()
 
+    no_result = True
     for i in range(len(search)):
         if(recipe_query.filter(recipe_ingredients=search[i]).exists()):
             recipe_query = recipe_query.filter(recipe_ingredients=search[i])
-
+            no_result = False
+    
+    if no_result == True:
+        result = {"recipe_id": "None"}
+        return JsonResponse(result)
+    
     # turn recipe_query into a list of recipes
     result = {}
 
@@ -75,3 +80,6 @@ def get_recipe(request, list):
         result[i] = recipe
 
     return JsonResponse(result)
+
+def add(request): 
+    return render(request, "cookbook/add.html")
