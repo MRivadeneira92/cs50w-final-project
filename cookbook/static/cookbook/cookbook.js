@@ -1,6 +1,8 @@
 let ingredientIdList = []
 let ingredientNameList = []
 let infoDisplay = false;
+let showResults = false; 
+let noResults = false; 
 let searchSwitch = 0; /* 0 == ingredient; 1 == recipe */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -61,39 +63,40 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Ingredient list is " + ingredientIdList);  
     }); 
 
-    /* submit list for searching recipe */ 
-
+    /* submit list and search for recipe */ 
+  
     btnSubmit.addEventListener('click', () => {
-        fetch(`/get_recipe/${ingredientIdList}`)
-        .then(response => response.json())
-        .then(list => {
-            console.log("response is" + list)
-            if(list["recipe_id"] == "None") {
-                document.querySelector("#results-cell-container").innerHTML = `<div id="results-info">No results<button class="button-style" onclick="clearContainer()">Clear</button></div>`
-            }
-            else {
-                document.querySelector('#results-container').innerHTML += `<div id="results-info"><h2>This is what we found</h2>
-                <button class="button-style" onclick="clearContainer()">Clear</button></div>`;
-                var numResults= Object.keys(list).length;
-                for (let i = 0; i < numResults; i++) {
-                    document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
-                }
-                setTimeout(() => {
-                    var cells = document.querySelectorAll(".cell-container");
-                    cells.forEach((cell)=> {
-                        cell.classList.remove("fade-in");
-                    })
-                }, 600)
-            }
-            
-
-            /* Trigger animation on cell when mouseout  */
-           /* document.querySelectorAll('.result-cell').forEach(cell => {
-                cell.addEventListener('mouseleave', (event) => {
-                    cell.classList.add('out');
+        if (ingredientIdList.length != 0){
+            if (checkResults() == true){
+                fetch(`/get_recipe/${ingredientIdList}`)
+                .then(response => response.json())
+                .then(list => {
+                    console.log("response is" + list)
+                    if(list["recipe_id"] == "None") {
+                        document.querySelector("#results-cell-container").innerHTML = `<div id="results-info">No results<button class="button-style" onclick="clearContainer()">
+                        Clear</button></div>`
+                        noResults = true;
+                    }
+                    else {
+                        document.querySelector('#results-container').innerHTML += `<div id="results-info"><h2>This is what we found</h2>
+                        <button class="button-style" onclick="clearContainer()">Clear</button></div>`;
+                        var numResults= Object.keys(list).length;
+                        for (let i = 0; i < numResults; i++) {
+                            document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
+                        }
+                        setTimeout(() => {
+                            var cells = document.querySelectorAll(".cell-container");
+                            cells.forEach((cell)=> {
+                                cell.classList.remove("fade-in");
+                            })
+                        }, 600)
+                        noResults = false;
+                    }  
                 })
-            })*/
-        })
+                showResults = true;
+            } 
+        }
+        
     })
 
     /* slider */
@@ -143,6 +146,8 @@ function clearContainer() {
         document.querySelector("#results-cell-container").innerHTML ="";
     }
     document.querySelector("#results-info").remove();
+    showResults = false;
+    noResults = false; 
 }
 
 function makeUpper(string) {
@@ -175,8 +180,7 @@ function getIngredient(string, switchOpt){
                         /* debug */ 
                         document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
                         document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
-                    }
-                    
+                    }        
                 }
             })
 }
@@ -203,5 +207,17 @@ function deleteIngredient(id) {
     setTimeout(()=> {
         document.querySelector(`#ing-${id}`).remove();
     },1000);
+}
 
+function checkResults(){
+    if (document.querySelector("#results-cell-container").innerHTML === ""){
+        return true;
+    }
+    else{ 
+        if(noResults == true)
+            return true;
+        else {
+            return false;
+        }
+    }
 }
