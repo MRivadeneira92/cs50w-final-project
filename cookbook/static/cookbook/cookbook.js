@@ -66,7 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
     /* submit list and search for recipe */ 
   
     btnSubmit.addEventListener('click', () => {
+        console.log("hey");
         if (ingredientIdList.length != 0){
+            document.querySelector("#results-cell-container").innerHTML = "";
             if (checkResults() == true){
                 fetch(`/get_recipe/${ingredientIdList}`)
                 .then(response => response.json())
@@ -96,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 showResults = true;
             } 
         }
-        
     })
 
     /* slider */
@@ -121,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
             infoDisplay = false;
         }
     })
-
 })
 
 function recipeContainer(dict) {

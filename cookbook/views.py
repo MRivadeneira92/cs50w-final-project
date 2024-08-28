@@ -1,8 +1,6 @@
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render
-from django import forms
-import json
-from .models import Ingredient, Recipe, Ingredient_type, Recipe_type
+from .models import Ingredient, Recipe
 
 def index(request):
     return render(request, "cookbook/homepage.html")
@@ -52,7 +50,7 @@ def get_recipe(request, list):
             recipe_query = recipe_query.filter(recipe_ingredients=search[i])
             no_result = False
     
-    if no_result == True:
+    if no_result:
         result = {"recipe_id": "None"}
         return JsonResponse(result)
     
