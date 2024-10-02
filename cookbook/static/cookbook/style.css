@@ -284,6 +284,10 @@ border-radius: 50%;
     transition: padding 0.5s, font-size 0.5s;
 }
 
+#results-info button {
+    margin-left: 5px;
+}
+
 .result-name {
     margin-bottom: 1rem;
     font-style: italic;

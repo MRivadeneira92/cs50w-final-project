@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
     /* submit list and search for recipe */ 
   
     btnSubmit.addEventListener('click', () => {
-        console.log("hey");
         if (ingredientIdList.length != 0){
             document.querySelector("#results-cell-container").innerHTML = "";
             if (checkResults() == true){
@@ -75,13 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(list => {
                     console.log("response is" + list)
                     if(list["recipe_id"] == "None") {
-                        document.querySelector("#results-cell-container").innerHTML = `<div id="results-info">No results<button class="button-style" onclick="clearContainer()">
-                        Clear</button></div>`
+                        document.querySelector("#results-cell-container").innerHTML = 'No results';
+                        document.querySelector("#btn-clear").style.display = "block";
                         noResults = true;
                     }
                     else {
-                        document.querySelector('#results-container').innerHTML += `<div id="results-info"><h2>This is what we found</h2>
-                        <button class="button-style" onclick="clearContainer()">Clear</button></div>`;
+                        document.querySelector("#btn-clear").style.display = "block";
                         var numResults= Object.keys(list).length;
                         for (let i = 0; i < numResults; i++) {
                             document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
@@ -148,6 +146,7 @@ function clearContainer() {
     document.querySelector("#results-info").remove();
     showResults = false;
     noResults = false; 
+    document.querySelector("#btn-clear").display = "none";
 }
 
 function makeUpper(string) {
