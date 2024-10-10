@@ -2,7 +2,7 @@
 {% load static %}
 {% block body %}
     <header id="title">
-        <h1>The Missing Ingredient's Cookbook</h1>
+        <h1>The Missing Ingredients Cookbook</h1>
     </header>
     <section id="search-container" class="d-flex">
         <input type="text" id="data-input" class="bar-input" placeholder="Ej: chicken">
@@ -32,7 +32,11 @@
             <h3>Results</h3>
             <button id="btn-clear" class="button-style" onclick="clearContainer()" style="margin-left:5px; display:none">Clear Results</button>
         </div>
-        <div id="results-cell-container">Welcome. This space is for results </div>
+        <div id="results-cell-container">
+            <p id="results-text" class="fade-in">Welcome. Use this page to find what to cook depending on what you have available. You can search for ingredients either 
+                one at a time or separated by a comma (,). You can also look for specific recipes by selecting "recipe" under the search bar.
+                Recipe only takes one option for now. Results will be displayed in cards below with a small description. Click on the card to see the full recipe</p>
+        </div>
     </section>
     <section id="info">
         <div id="info-toggle">

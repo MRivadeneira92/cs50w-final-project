@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var infoContainer = document.querySelector("#info-toggle");
     var btnSearch = document.querySelector('#btn-search');
     var btnSubmit = document.querySelector('#btn-submit');
+    var btnClear = document.querySelector("#btn-clear");
     
     /* get value from input  */ 
 
@@ -74,12 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(list => {
                     console.log("response is" + list)
                     if(list["recipe_id"] == "None") {
-                        document.querySelector("#results-cell-container").innerHTML = 'No results';
-                        document.querySelector("#btn-clear").style.display = "block";
+                        document.querySelector("#results-cell-container").innerHTML = '<p class="fade-in">No results</p>';
                         noResults = true;
                     }
                     else {
-                        document.querySelector("#btn-clear").style.display = "block";
                         var numResults= Object.keys(list).length;
                         for (let i = 0; i < numResults; i++) {
                             document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
@@ -92,6 +91,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         }, 600)
                         noResults = false;
                     }  
+                    btnClear.classList.add("fade-in");
+
+                    setTimeout(()=> {
+                        btnClear.style.display = "block";
+                    }, 700);
+                    setTimeout(()=> {
+                        btnClear.classList.remove("fade-in");
+                    }, 2000)
+
                 })
                 showResults = true;
             } 
@@ -140,13 +148,16 @@ function recipeContainer(dict) {
 }
 
 function clearContainer() {
-    if(document.querySelector("#results-cell-container") != null){
-        document.querySelector("#results-cell-container").innerHTML ="";
+    if(document.querySelector("#results-cell-container") != null) {
+        document.querySelector("#results-cell-container").innerHTML ="<p class='fade-in'>Welcome. This space is for results</p>";
     }
-    document.querySelector("#results-info").remove();
     showResults = false;
     noResults = false; 
-    document.querySelector("#btn-clear").display = "none";
+    document.querySelector("#btn-clear").classList.add("fade-out");
+    setTimeout(() => {
+        document.querySelector("#btn-clear").classList.remove("fade-out");
+        document.querySelector("#btn-clear").style.display= "none";
+    }, 1000);
 }
 
 function makeUpper(string) {
@@ -219,4 +230,11 @@ function checkResults(){
             return false;
         }
     }
+}
+
+function fadeIn(id) {
+    document.querySelector(id).classList.add("fade-in");
+    setTimeout(()=> {
+        document.querySelector(id).classList.remove("fade-in")
+    }, 600)
 }
