@@ -23,12 +23,9 @@ class Recipe(models.Model):
     recipe_name = models.CharField(max_length=100)
     recipe_description = models.CharField(max_length=60)
     recipe_ingredients = models.ManyToManyField(Ingredient, blank=True)
+    recipe_ammounts = models.CharField(max_length=200)
     recipe_type = models.ManyToManyField(Recipe_type)
     steps = models.TextField(max_length=1000)
 
     def __str__(self):
         return f"{self.id}: {self.recipe_name}"
-
-class Ammount (models.Model):
-    id = models.ForeignKey(Recipe, on_delete=models.CASCADE, primary_key=True)
-    measure = models.CharField(blank=False, max_length=1000)
