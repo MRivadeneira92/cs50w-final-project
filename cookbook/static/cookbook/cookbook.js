@@ -7,18 +7,18 @@ let searchSwitch = 0; /* 0 == ingredient; 1 == recipe */
 
 document.addEventListener('DOMContentLoaded', () => {
     var infoContainer = document.querySelector("#info-toggle");
-    var btnSearch = document.querySelector('#btn-search');
     var btnSubmit = document.querySelector('#btn-submit');
     var btnClear = document.querySelector("#btn-clear");
-    
-    /* get value from input  */ 
 
-    btnSearch.addEventListener('click', () => {
+    /* submit list and search for recipe */ 
+  
+    btnSubmit.addEventListener('click', () => {
+        var dataList = []
         var dataInput = document.querySelector('#data-input');
         var ingName = "";
         if (dataInput.value != "") {
-            var dataList = []
             /* check for multiple ingredients on input */
+
             if (dataInput.value.includes(",") || dataInput.value.includes(", ")){
                 let foo = ""
                 for (let i = 0; i <= dataInput.value.length; i++){
@@ -41,69 +41,85 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             else {
-                ingName = makeUpper(dataInput.value);
+                dataList.push(makeUpper(dataInput.value));
             }
-
             /* check searchSwitch state */
             if (document.querySelector("#opt-checkbox").checked == true) {
                 searchSwitch = 1; 
             }
 
             if (searchSwitch == 0) {
-                /* search ingredients */
-                if (dataList.length > 0){
-                    for (let i = 0; i < dataList.length; i++){
-                        getIngredient(dataList[i],searchSwitch);
+                console.log("dataList in search ing: " + dataList);
+
+                /*  if more than one loop until all are identified */
+                if (dataList.length > 0) {
+                    for (let i = 0; i < dataList.length; i++) {
+                        fetch(`/get_ingredients/${dataList[i]}/${searchSwitch}`)
+                        .then(response => response.json())
+                        .then(response => {
+                            if (Object.keys(response).length === 0) {
+                                document.querySelector('#data-message').innerHTML = 'No ingredient found';
+                            }
+                            else {
+                                if (!ingredientIdList.includes(response['id'])) { 
+
+                                    ingredientIdList.push(response['id']);
+                                    ingredientNameList.push(response['name']);
+                                    document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
+                                    document.querySelector('#data-input').value = "";
+                                    /* debug */ 
+                                    document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
+                                    document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
+
+                                }        
+                            }
+                            console.log(ingredientIdList);
+                            if (i == (dataList.length - 1)) {
+                                /* Search for recipes */ 
+                                if (ingredientIdList.length != 0) {
+                                    console.log("hey");
+                                    document.querySelector("#results-cell-container").innerHTML = "";
+                                    if (checkResults() == true){
+                                        fetch(`/get_recipe/${ingredientIdList}`)
+                                        .then(response => response.json())
+                                        .then(list => {
+                                            console.log("response is" + list)
+                                            if(list["recipe_id"] == "None") {
+                                                document.querySelector("#results-cell-container").innerHTML = '<p class="fade-in">No results</p>';
+                                                noResults = true;
+                                            }
+                                            else {
+                                                var numResults= Object.keys(list).length;
+                                                for (let i = 0; i < numResults; i++) {
+                                                    document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
+                                                }
+                                                setTimeout(() => {
+                                                    var cells = document.querySelectorAll(".cell-container");
+                                                    cells.forEach((cell)=> {
+                                                        cell.classList.remove("fade-in");
+                                                    })
+                                                }, 600)
+                                                noResults = false;
+                                            }  
+                                            btnClear.classList.add("fade-in");
+                
+                                            setTimeout(()=> {
+                                                btnClear.style.display = "block";
+                                            }, 700);
+                                            setTimeout(()=> {
+                                                btnClear.classList.remove("fade-in");
+                                            }, 2000)
+                
+                                        })
+                                        showResults = true;
+                                    } 
+                                }
+                            }
+                        })
                     }
                 }
-                else{
-                    getIngredient(ingName,searchSwitch);
-                }
-            }           
-        } 
-        console.log("Ingredient list is " + ingredientIdList);  
-    }); 
-
-    /* submit list and search for recipe */ 
-  
-    btnSubmit.addEventListener('click', () => {
-        if (ingredientIdList.length != 0){
-            document.querySelector("#results-cell-container").innerHTML = "";
-            if (checkResults() == true){
-                fetch(`/get_recipe/${ingredientIdList}`)
-                .then(response => response.json())
-                .then(list => {
-                    console.log("response is" + list)
-                    if(list["recipe_id"] == "None") {
-                        document.querySelector("#results-cell-container").innerHTML = '<p class="fade-in">No results</p>';
-                        noResults = true;
-                    }
-                    else {
-                        var numResults= Object.keys(list).length;
-                        for (let i = 0; i < numResults; i++) {
-                            document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
-                        }
-                        setTimeout(() => {
-                            var cells = document.querySelectorAll(".cell-container");
-                            cells.forEach((cell)=> {
-                                cell.classList.remove("fade-in");
-                            })
-                        }, 600)
-                        noResults = false;
-                    }  
-                    btnClear.classList.add("fade-in");
-
-                    setTimeout(()=> {
-                        btnClear.style.display = "block";
-                    }, 700);
-                    setTimeout(()=> {
-                        btnClear.classList.remove("fade-in");
-                    }, 2000)
-
-                })
-                showResults = true;
             } 
-        }
+        }    
     })
 
     /* slider */
@@ -175,24 +191,27 @@ function makeUpper(string) {
 
 function getIngredient(string, switchOpt){
     fetch(`/get_ingredients/${string}/${switchOpt}`)
-            .then(response => response.json())
-            .then(response => {
-                if (Object.keys(response).length === 0) {
-                    document.querySelector('#data-message').innerHTML = 'No ingredient found';
-                }
-                else {
-                    if (!ingredientIdList.includes(response['id'])) { 
-                        ingredientIdList.push(response['id']);
-                        ingredientNameList.push(response['name']);
-                        document.querySelector("#ingredients-result").innerHTML += ingredientContainer(string,response['id']);
-                        document.querySelector('#data-input').value = "";
-                        
-                        /* debug */ 
-                        document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
-                        document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
-                    }        
-                }
-            })
+    .then(response => response.json())
+    .then(response => {
+        if (Object.keys(response).length === 0) {
+            document.querySelector('#data-message').innerHTML = 'No ingredient found';
+        }
+        else {
+            if (!ingredientIdList.includes(response['id'])) { 
+                ingredientIdList.push(response['id']);
+                ingredientNameList.push(response['name']);
+                document.querySelector("#ingredients-result").innerHTML += ingredientContainer(string,response['id']);
+                document.querySelector('#data-input').value = "";
+                /* debug */ 
+                document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
+                document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
+            }        
+        }
+    })
+}
+
+function updateIngId() {
+    console.log(ingredientIdList.length);
 }
 
 function showInfo(){

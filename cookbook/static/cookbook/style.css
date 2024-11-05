@@ -47,7 +47,22 @@ main {
     margin: 0 auto;
     padding: 0 10%;
 }
+/* nav bar */
 
+nav {
+    display: flex;
+    padding: 0 10%;
+}
+
+nav ul {
+    margin: 0 auto;
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    padding: 8px;
+}
 /* main page */
 
 .bar-input {
@@ -281,7 +296,6 @@ border-radius: 50%;
     animation-fill-mode: forwards;
 }
 
-
 .result-cell {
     background-color: #e2eafc;
     border-radius: 5px;
@@ -324,6 +338,7 @@ border-radius: 50%;
 
 #results-cell-container p {
     margin: 0 auto;
+    width: 88ch;
 }
 
 #results-text {
@@ -410,7 +425,5 @@ border-radius: 50%;
     .result-cell:hover{
         padding: 1.8rem;
         font-size: 1.2rem;
-    }
-
-    
+    } 
 }
