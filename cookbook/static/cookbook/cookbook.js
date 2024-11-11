@@ -73,17 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 }        
                             }
-                            console.log(ingredientIdList);
                             if (i == (dataList.length - 1)) {
                                 /* Search for recipes */ 
                                 if (ingredientIdList.length != 0) {
-                                    console.log("hey");
                                     document.querySelector("#results-cell-container").innerHTML = "";
                                     if (checkResults() == true){
                                         fetch(`/get_recipe/${ingredientIdList}`)
                                         .then(response => response.json())
                                         .then(list => {
-                                            console.log("response is" + list)
                                             if(list["recipe_id"] == "None") {
                                                 document.querySelector("#results-cell-container").innerHTML = '<p class="fade-in">No results</p>';
                                                 noResults = true;
@@ -170,6 +167,8 @@ function clearContainer() {
     showResults = false;
     noResults = false; 
     document.querySelector("#btn-clear").classList.add("fade-out");
+    ingredientIdList = "";
+    document.querySelector('#ingredients-result').innerHTML = "";
     setTimeout(() => {
         document.querySelector("#btn-clear").classList.remove("fade-out");
         document.querySelector("#btn-clear").style.display= "none";
@@ -208,10 +207,6 @@ function getIngredient(string, switchOpt){
             }        
         }
     })
-}
-
-function updateIngId() {
-    console.log(ingredientIdList.length);
 }
 
 function showInfo(){
