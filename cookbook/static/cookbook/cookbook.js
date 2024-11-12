@@ -1,14 +1,15 @@
-let ingredientIdList = []
-let ingredientNameList = []
+let ingredientIdList = [];
+let ingredientNameList = [];
 let infoDisplay = false;
 let showResults = false; 
 let noResults = false; 
 let searchSwitch = 0; /* 0 == ingredient; 1 == recipe */
-
+let ingDisplayList = [];
 document.addEventListener('DOMContentLoaded', () => {
     var infoContainer = document.querySelector("#info-toggle");
     var btnSubmit = document.querySelector('#btn-submit');
     var btnClear = document.querySelector("#btn-clear");
+    var results = "";
 
     /* submit list and search for recipe */ 
   
@@ -17,9 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
         var dataInput = document.querySelector('#data-input');
         var ingName = "";
         if (dataInput.value != "") {
+            console.log("one");
             /* check for multiple ingredients on input */
-
             if (dataInput.value.includes(",") || dataInput.value.includes(", ")){
+                console.log("three");
                 let foo = ""
                 for (let i = 0; i <= dataInput.value.length; i++){
                     if (dataInput.value[i] == " " && dataInput.value[i + 1] == ","){
@@ -41,82 +43,89 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             else {
+                console.log("four");
                 dataList.push(makeUpper(dataInput.value));
             }
             /* check searchSwitch state */
             if (document.querySelector("#opt-checkbox").checked == true) {
                 searchSwitch = 1; 
             }
+        } 
+        else if (dataInput.value == "" && showResults) {
+            console.log("five");
+            dataList = ingDisplayList;
 
-            if (searchSwitch == 0) {
-                console.log("dataList in search ing: " + dataList);
+        }
 
-                /*  if more than one loop until all are identified */
-                if (dataList.length > 0) {
-                    for (let i = 0; i < dataList.length; i++) {
-                        fetch(`/get_ingredients/${dataList[i]}/${searchSwitch}`)
-                        .then(response => response.json())
-                        .then(response => {
-                            if (Object.keys(response).length === 0) {
-                                document.querySelector('#data-message').innerHTML = 'No ingredient found';
-                            }
-                            else {
-                                if (!ingredientIdList.includes(response['id'])) { 
+        console.log("dataInput.value: " + dataInput.value + ", showResults: " + showResults)
+        if (searchSwitch == 0) {
+            console.log("dataList in search ing: " + dataList);
 
-                                    ingredientIdList.push(response['id']);
-                                    ingredientNameList.push(response['name']);
-                                    document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
-                                    document.querySelector('#data-input').value = "";
-                                    /* debug */ 
-                                    document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
-                                    document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
-
-                                }        
-                            }
-                            if (i == (dataList.length - 1)) {
-                                /* Search for recipes */ 
-                                if (ingredientIdList.length != 0) {
-                                    document.querySelector("#results-cell-container").innerHTML = "";
-                                    if (checkResults() == true){
-                                        fetch(`/get_recipe/${ingredientIdList}`)
-                                        .then(response => response.json())
-                                        .then(list => {
-                                            if(list["recipe_id"] == "None") {
-                                                document.querySelector("#results-cell-container").innerHTML = '<p class="fade-in">No results</p>';
-                                                noResults = true;
+            /*  if more than one loop until all are identified */
+            if (dataList.length > 0) {
+                for (let i = 0; i < dataList.length; i++) {
+                    fetch(`/get_ingredients/${dataList[i]}/${searchSwitch}`)
+                    .then(response => response.json())
+                    .then(response => {
+                        if (Object.keys(response).length === 0) {
+                            document.querySelector('#data-message').innerHTML = 'No ingredient found';
+                        }
+                        else {
+                            if (!ingredientIdList.includes(response['id'])) { 
+                                ingredientIdList.push(response['id']);
+                                ingredientNameList.push(response['name']);
+                                ingDisplayList.push(response['name']);
+                                document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
+                                document.querySelector('#data-input').value = "";
+                                /* debug */ 
+                                document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
+                                document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
+                            }        
+                        }
+                        if (i == (dataList.length - 1)) {
+                            /* Search for recipes */ 
+                            if (ingredientIdList.length != 0) {
+                                document.querySelector("#results-cell-container").innerHTML = "";
+                                if (checkResults() == true){
+                                    fetch(`/get_recipe/${ingredientIdList}`)
+                                    .then(response => response.json())
+                                    .then(list => {
+                                        if(list["recipe_id"] == "None") {
+                                            document.querySelector("#results-cell-container").innerHTML = '<p class="fade-in">No results</p>';
+                                            noResults = true;
+                                        }
+                                        else {
+                                            var numResults= Object.keys(list).length;
+                                            for (let i = 0; i < numResults; i++) {
+                                                document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
                                             }
-                                            else {
-                                                var numResults= Object.keys(list).length;
-                                                for (let i = 0; i < numResults; i++) {
-                                                    document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
-                                                }
-                                                setTimeout(() => {
-                                                    var cells = document.querySelectorAll(".cell-container");
-                                                    cells.forEach((cell)=> {
-                                                        cell.classList.remove("fade-in");
-                                                    })
-                                                }, 600)
-                                                noResults = false;
-                                            }  
-                                            btnClear.classList.add("fade-in");
-                
-                                            setTimeout(()=> {
-                                                btnClear.style.display = "block";
-                                            }, 700);
-                                            setTimeout(()=> {
-                                                btnClear.classList.remove("fade-in");
-                                            }, 2000)
-                
-                                        })
-                                        showResults = true;
-                                    } 
-                                }
+                                            setTimeout(() => {
+                                                var cells = document.querySelectorAll(".cell-container");
+                                                cells.forEach((cell)=> {
+                                                    cell.classList.remove("fade-in");
+                                                })
+                                            }, 600)
+                                            noResults = false;
+                                        }  
+                                        btnClear.classList.add("fade-in");
+            
+                                        setTimeout(()=> {
+                                            btnClear.style.display = "block";
+                                        }, 700);
+                                        setTimeout(()=> {
+                                            btnClear.classList.remove("fade-in");
+                                        }, 2000)
+            
+                                    })
+                                    showResults = true;
+                                } 
                             }
-                        })
-                    }
+                        }
+                    })
                 }
-            } 
-        }    
+            }
+        }
+        
     })
 
     /* slider */
@@ -167,7 +176,8 @@ function clearContainer() {
     showResults = false;
     noResults = false; 
     document.querySelector("#btn-clear").classList.add("fade-out");
-    ingredientIdList = "";
+    ingredientIdList = [];
+    ingDisplayList = [];
     document.querySelector('#ingredients-result').innerHTML = "";
     setTimeout(() => {
         document.querySelector("#btn-clear").classList.remove("fade-out");
@@ -227,6 +237,7 @@ function ingredientContainer(name, id){
 function deleteIngredient(id) {
     let position = ingredientIdList.indexOf(id);
     ingredientIdList.splice(position);
+    ingDisplayList.splice(position);
     document.querySelector(`#ing-${id}`).classList.add("fade-out");
     setTimeout(()=> {
         document.querySelector(`#ing-${id}`).remove();
