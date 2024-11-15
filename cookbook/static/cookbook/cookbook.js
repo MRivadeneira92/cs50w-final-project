@@ -227,10 +227,11 @@ function showInfo(){
 }
 
 function ingredientContainer(name, id){ 
-    var html = `<div class="ing-container" onClick="deleteIngredient(${id})" id="ing-${id}">
-                    <p>${name}</p>
-                    <span> x</span>
-                </div>`
+    var html = 
+        `<div class="ing-container" onClick="deleteIngredient(${id})" id="ing-${id}">
+            <p>${name}</p>
+            <span> x</span>
+        </div>`
     return html;
 }
 

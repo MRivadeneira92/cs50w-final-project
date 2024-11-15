@@ -11,7 +11,7 @@ def recipe_page(request, id, name):
         recipe = Recipe.objects.get(id=id)
     else: 
         return render(request, "cookbook/not-found.html")
-    
+    print(recipe.recipe_ammounts)
     ammounts = recipe.recipe_ammounts.split(', ')
     print(ammounts)
     return render(request, "cookbook/recipe.html", {
@@ -24,7 +24,7 @@ class NewRecipeForm(forms.Form):
     Description = forms.CharField(max_length=200)
     Ingredients = forms.CharField(max_length=200)
     Type = forms.ModelMultipleChoiceField(queryset=Recipe_type.objects.all())
-    Steps = forms.CharField(max_length=500)
+    Steps = forms.CharField(widget=forms.Textarea)
 
 # API
 
@@ -98,10 +98,10 @@ def add(request):
             #process ingredient into list 
             ing_raw = form.cleaned_data["Ingredients"]
             if ":" not in ing_raw:
-                raise forms.ValidationError("Ammounts and ingredients must be separated by ':'")
+                return render(request, "cookbook/add.html", {"form": form, "Message": "Ammounts and ingredients must be separated by ':'"})
 
             if "," not in ing_raw:
-                raise forms.ValidationError("Ingredients must be separated by a comma ', '")    
+                return render(request, "cookbook/add.html", {"form": form, "Message": "Ingredients must be separated by a comma ', '"})
             a = ing_raw.split(", ")
             ing = []
             for text in a :
@@ -111,11 +111,12 @@ def add(request):
             ing_list = Ingredient.objects.all()
             id_ing = []
             for b in ing:
-                if ing_list.filter(ingredient_name=b).first() is not None:
-                    c = ing_list.get(ingredient_name=b)
+                print(b)
+                if ing_list.filter(ingredient_name=b.capitalize()).first() is not None:
+                    c = ing_list.get(ingredient_name=b.capitalize())
                     id_ing.append(c.id)
                 else: 
-                    return render(request, "cookbook/add.html", {"form": form})
+                    return render(request, "cookbook/add.html", {"form": form, "error": b})
                 
             # turn ingredients into ammount format
             x = form.cleaned_data["Ingredients"]
@@ -131,5 +132,6 @@ def add(request):
             recipe.save()            
             recipe.recipe_type.set(form.cleaned_data["Type"])
             recipe.recipe_ingredients.set(id_ing)
+        return render(request, "cookbook/add.html", {"form": form, "Message": "Recipe added  succesfully"})
     
     return render(request, "cookbook/add.html", {"form": form})
