@@ -26,6 +26,7 @@ class Recipe(models.Model):
     recipe_ammounts = models.CharField(max_length=200)
     recipe_type = models.ManyToManyField(Recipe_type)
     steps = models.TextField(max_length=1000)
+    recipe_time = models.CharField(max_length=100)
 
     def __str__(self):
         return f"{self.id}: {self.recipe_name}"

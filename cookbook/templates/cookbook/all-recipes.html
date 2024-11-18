@@ -1,0 +1,21 @@
+{% extends "cookbook/layout.html" %}
+
+{% block body %}
+    <section id="menu-container">
+        {% for recipe in menu %}
+        <div class='cell-container fade-in'>
+            <div class='result-cell'>
+                <a href="/{{recipe.id}}/hey">
+                    <div class='result-img-container'>
+                    </div>
+                    <div class='result-text'>
+                        <p class='result-name' >{{recipe.recipe_name}}</p>
+                        <p>{{recipe.recipe_time}}</p>
+                        <p class='result-description'>{{recipe.recipe_description}}</p>
+                    </div>
+                    </a>
+                </div>
+        </div>
+    {% endfor %}
+    </section>
+{% endblock %}

@@ -3,6 +3,14 @@ from django.shortcuts import render
 from .models import Ingredient, Recipe, Recipe_type
 from django import forms
 
+class NewRecipeForm(forms.Form): 
+    Name = forms.CharField(max_length=100)
+    Description = forms.CharField(max_length=200)
+    Time = forms.CharField(max_length=100)
+    Ingredients = forms.CharField(max_length=200)
+    Type = forms.ModelMultipleChoiceField(queryset=Recipe_type.objects.all())
+    Steps = forms.CharField(widget=forms.Textarea)
+
 def index(request):
     return render(request, "cookbook/homepage.html")
 
@@ -11,20 +19,15 @@ def recipe_page(request, id, name):
         recipe = Recipe.objects.get(id=id)
     else: 
         return render(request, "cookbook/not-found.html")
-    print(recipe.recipe_ammounts)
     ammounts = recipe.recipe_ammounts.split(', ')
-    print(ammounts)
     return render(request, "cookbook/recipe.html", {
         "recipe": recipe,
         "ammounts": ammounts
     })
 
-class NewRecipeForm(forms.Form): 
-    Name = forms.CharField(max_length=100)
-    Description = forms.CharField(max_length=200)
-    Ingredients = forms.CharField(max_length=200)
-    Type = forms.ModelMultipleChoiceField(queryset=Recipe_type.objects.all())
-    Steps = forms.CharField(widget=forms.Textarea)
+def all_recipes(request): 
+    menu = Recipe.objects.all()
+    return render(request, "cookbook/all-recipes.html", { "menu": menu})
 
 # API
 
@@ -83,7 +86,8 @@ def get_recipe(request, list):
             "recipe_name": str(recipe_query[i].recipe_name),
             "recipe_ingredients": ingredients,
             "recipe_type": str(recipe_type[0]["re_type_name"]),
-            "steps": str(recipe_query[i].steps)
+            "steps": str(recipe_query[i].steps),
+            "recipe_time": recipe_query[i].recipe_time
         }
         result[i] = recipe
 
@@ -127,7 +131,8 @@ def add(request):
                 recipe_name = form.cleaned_data["Name"],
                 recipe_description = form.cleaned_data["Description"],
                 steps = form.cleaned_data["Steps"],
-                recipe_ammounts = ammounts
+                recipe_ammounts = ammounts,
+                recipe_time = form.cleaned_data["Time"]
             )
             recipe.save()            
             recipe.recipe_type.set(form.cleaned_data["Type"])

@@ -24,5 +24,6 @@ urlpatterns = [
     path('<int:id>/<str:name>', views.recipe_page, name='recipe'),
     path('get_ingredients/<str:name>/<int:switch>', views.get_ingredients),
     path('get_recipe/<str:list>', views.get_recipe),
-    path('add', views.add, name='add')
+    path('add', views.add, name='add'),
+    path('all-recipes', views.all_recipes, name='all-recipes')
 ]

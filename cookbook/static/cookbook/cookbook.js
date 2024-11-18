@@ -18,10 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         var dataInput = document.querySelector('#data-input');
         var ingName = "";
         if (dataInput.value != "") {
-            console.log("one");
             /* check for multiple ingredients on input */
             if (dataInput.value.includes(",") || dataInput.value.includes(", ")){
-                console.log("three");
                 let foo = ""
                 for (let i = 0; i <= dataInput.value.length; i++){
                     if (dataInput.value[i] == " " && dataInput.value[i + 1] == ","){
@@ -43,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             else {
-                console.log("four");
                 dataList.push(makeUpper(dataInput.value));
             }
             /* check searchSwitch state */
@@ -52,12 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } 
         else if (dataInput.value == "" && showResults) {
-            console.log("five");
             dataList = ingDisplayList;
 
         }
 
-        console.log("dataInput.value: " + dataInput.value + ", showResults: " + showResults)
         if (searchSwitch == 0) {
             console.log("dataList in search ing: " + dataList);
 
