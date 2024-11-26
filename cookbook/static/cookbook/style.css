@@ -328,7 +328,8 @@ border-radius: 50%;
 
 .result-img-container {
     background-color: aquamarine;
-    height: 72px;
+    height: 90px;
+    margin-bottom: 3px;
 }
 
 #results-cell-container {
