@@ -1,3 +1,5 @@
+/* Sitewide */ 
+
 * {
     margin:0;
     padding: 0;
@@ -30,23 +32,38 @@ a {
 
 .button-style {
     width: 120px;
+    height: 34px;
     border-radius: 20px ;
-    background-color: #e2eafc ;
+    background-color: #d3f4f4 ;
     color: #051923;
     border: gray;
     transition: background-color 0.5s, opacity 0.3s;
-    padding: 0.3rem;
     opacity: 1;
+    margin-top: 4px;
 }
 
 .button-style:hover{
-    background-color:#ccdbfd;
+    background-color:#95cece;
 }
 
 main {
     margin: 0 auto;
     padding: 0 10%;
 }
+
+/* Header */
+
+header {
+    background-color: #d3f4f4;
+}
+
+#title h1 {
+    text-align: center;
+    padding-top: 2rem;
+    font-size:2.5rem;
+    letter-spacing: 0.25rem;
+}
+
 /* nav bar */
 
 nav {
@@ -63,6 +80,7 @@ nav ul {
 nav ul li {
     padding: 8px;
 }
+
 /* main page */
 
 .bar-input {
@@ -71,6 +89,8 @@ nav ul li {
     border: 1px solid grey;
     transition: border  0.2s;
     margin-bottom: 0.25rem;
+    width: 100%;
+    margin-right: 10px;
 }
 
 .bar-input:focus {
@@ -80,12 +100,8 @@ nav ul li {
 
 body {
     /*background-image: linear-gradient(112.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(157.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(135deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(90deg, rgb(195, 195, 195),rgb(228, 228, 228)); background-blend-mode:overlay,overlay,overlay,normal;
-*/
+    */
     background: #edf2fb;
-    }
-
-#buttons-container {
-    margin-top: 0.65rem;
 }
 
 .container {
@@ -108,13 +124,6 @@ body {
     max-width: 800px;
     display: flex;
     flex-direction: column;
-}
-
-#title {
-    text-align: center;
-    margin-top: 2rem;
-    font-size:2.5rem;
-    letter-spacing: 0.25rem;
 }
 
 /* slider */ 
@@ -182,6 +191,35 @@ border-radius: 34px;
 .slider.round:before {
 border-radius: 50%;
 } 
+
+/* Content container */
+
+    #content-container {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #main-left {
+        background-color: #2196F3;
+        width:75%;
+        height: 405px;
+        margin-right: 5px;
+        border-radius: 5px;
+    }
+
+    #right-container {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+    }
+
+    .right-article {
+        background-color: #95cece;
+        width: 100%;
+        height: 200px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+    }
 
 /* info div */
 #info-toggle {

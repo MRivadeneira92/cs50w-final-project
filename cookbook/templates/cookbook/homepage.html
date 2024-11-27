@@ -1,11 +1,12 @@
 {% extends "cookbook/layout.html" %}
 {% load static %}
 {% block body %}
-    <header id="title">
-        <h1>The Missing Ingredients Cookbook</h1>
-    </header>
     <section id="search-container" class="d-flex">
-        <input type="text" id="data-input" class="bar-input" placeholder="Ej: chicken">
+        <div style="display: flex; flex-direction: row;">
+            <input type="text" id="data-input" class="bar-input" placeholder="Ej: chicken">
+            <button type="button" id="btn-submit" class="button-style">Submit</button>
+        </div>
+
         <div id="search-slider" class="d-flex">
             <p id="opt-ingredient">Ingredient</p>
             <label class="switch">
@@ -15,9 +16,7 @@
             <p id="opt-recipe">Recipe</p>
             <br>
         </div>
-        <div id="buttons-container" class="d-flex flex-row justify-content-between">
-            <button type="button" id="btn-submit" class="button-style">Submit</button>
-        </div>
+
         <p id="data-message"></p>
     </section>
     <section id="ingredients">
@@ -46,6 +45,24 @@
         </div>
     </section>
 
+    <hr>
+    <!--Homepage A: Content-->
+
+    <section id="content-container">
+        <section id="main-left">
+            <article>
+
+            </article>
+        </section>
+        <section id="right-container">
+            <article class="right-article">
+
+            </article>
+            <article class="right-article">
+
+            </article >
+        </section>
+    </section>
 
     <hr>
     <h1>DEBUG</h1>
@@ -55,4 +72,6 @@
         <label for="debug-ingredient-list">List of ingredients</label>
         <p id="list for wrap">Rice,Whole chicken,Salt,Lemon,Croutons,Tomato,Olive oil,Lettuce,Pasta,Kosher salt,Regular salt,Egg,Potato,Lemon juice</p>
     </div>
+
+
 {% endblock %}
