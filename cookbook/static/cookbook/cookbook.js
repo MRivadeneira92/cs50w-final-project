@@ -50,8 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
         } 
         else if (dataInput.value == "" && showResults) {
             dataList = ingDisplayList;
-
         }
+
+        /* switch between card-container and content-container */
+        document.querySelector("#content-container").classList.add("fade-out"); 
+        setTimeout(() => {
+            document.querySelector("#content-container").style.display = "none";
+        },3000)
+        setTimeout(() => {
+            document.querySelector("#cards-container").style.display = "block";
+
+        },4000)
 
         if (searchSwitch == 0) {
             console.log("dataList in search ing: " + dataList);

@@ -1,7 +1,7 @@
 {% extends "cookbook/layout.html" %}
 {% load static %}
 {% block body %}
-    <section id="search-container" class="d-flex">
+    <section id="searchbar-container" class="d-flex">
         <div style="display: flex; flex-direction: row;">
             <input type="text" id="data-input" class="bar-input" placeholder="Ej: chicken">
             <button type="button" id="btn-submit" class="button-style">Submit</button>
@@ -19,51 +19,91 @@
 
         <p id="data-message"></p>
     </section>
-    <section id="ingredients">
-        <h3>Ingredients</h3>
-        <div id="ingredients-result">
+     <!--Homepage A: Content-->
 
-        </div>
-    </section>
-    <section id="results-container">
-        <div style="display: flex; flex-direction: row;">
-            <h3>Results</h3>
-            <button id="btn-clear" class="button-style" onclick="clearContainer()" style="margin-left:5px; display:none">Clear Results</button>
-        </div>
-        <div id="results-cell-container">
-            <p id="results-text" class="fade-in">Welcome. Use this page to find what to cook depending on what you have available. You can search for ingredients either 
-                one at a time or separated by a comma (,). You can also look for specific recipes by selecting "recipe" under the search bar.
-                Recipe only takes one option for now. Results will be displayed in cards below with a small description. Click on the card to see the full recipe</p>
-        </div>
-    </section>
-    <section id="info">
-        <div id="info-toggle">
-            <span>&#x3e</span><label for="info-text">How do I use this page?</label>
-            <p id="info-text"> Use this page to find what to cook depending on what you have available. You can search for ingredients either 
-                one at a time or separated by a comma (,). You can also look for specific recipes by selecting "recipe" under the search bar.
-                Recipe only takes one option for now. Results will be displayed in cards below with a small description. Click on the card to see the full recipe.</p>
-        </div>
-    </section>
-
-    <hr>
-    <!--Homepage A: Content-->
-
-    <section id="content-container">
+    <section id="content-container" class="fade-op">
         <section id="main-left">
-            <article>
-
-            </article>
+            <a href="" class="overlay-link">
+                <article id="main-article">
+                    <div class="article-text-container">
+                        <h3>Title</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus. 
+                            Aliquam ac dolor vel dolor molestie laoreet sed eu est. Vivamus et mattis felis</p>
+                    </div>
+                </article>
+            </a>
         </section>
+        <!--Right section-->
         <section id="right-container">
-            <article class="right-article">
-
-            </article>
-            <article class="right-article">
-
-            </article >
+            {% if recipe01 %}
+            <a href="/{{recipe01.id}}/hey" class="overlay-link">
+            {% else %}
+            <a href="" class="overlay-link">
+            {% endif %}
+                <article class="right-article">
+                    <div class="right-image">image</div>
+                    <div class="right-text-container">
+                        {% if recipe01 %}
+                            <h3>{{ recipe01.recipe_name }}</h3>
+                            <p>{{ recipe01.recipe_description }}</p>
+                        {% else %}
+                        <h3>Title</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus.</p>
+                        {% endif %}
+                    </div>
+                </article>
+            </a>
+            {% if recipe02 %}
+            <a href="/{{recipe02.id}}/hey" class="overlay-link">
+            {% else %}
+            <a href="" class="overlay-link">
+            {% endif %}
+                <article class="right-article">
+                    <div class="right-image">image</div>
+                    <div class="right-text-container">
+                    {% if recipe01 %}
+                        <h3>{{ recipe02.recipe_name }}</h3>
+                        <p>{{ recipe02.recipe_description }}</p>
+                    {% else %}
+                        <h3>Title</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus.</p>
+                    {% endif %}
+                    </div>
+                </article>
+            </a>
         </section>
     </section>
 
+    <!--Homepage B: Results-->
+
+    <div id="cards-container" style="display: none;">
+        <section id="ingredients">
+            <h3>Ingredients</h3>
+            <div id="ingredients-result">
+    
+            </div>
+        </section>
+        <section id="results-container">
+            <div style="display: flex; flex-direction: row;">
+                <h3>Results</h3>
+                <button id="btn-clear" class="button-style" onclick="clearContainer()" style="margin-left:5px; display:none">Clear Results</button>
+            </div>
+            <div id="results-cell-container">
+                <p id="results-text" class="fade-in">Welcome. Use this page to find what to cook depending on what you have available. You can search for ingredients either 
+                    one at a time or separated by a comma (,). You can also look for specific recipes by selecting "recipe" under the search bar.
+                    Recipe only takes one option for now. Results will be displayed in cards below with a small description. Click on the card to see the full recipe</p>
+            </div>
+        </section>
+        <section id="info">
+            <div id="info-toggle">
+                <span>&#x3e</span><label for="info-text">How do I use this page?</label>
+                <p id="info-text"> Use this page to find what to cook depending on what you have available. You can search for ingredients either 
+                    one at a time or separated by a comma (,). You can also look for specific recipes by selecting "recipe" under the search bar.
+                    Recipe only takes one option for now. Results will be displayed in cards below with a small description. Click on the card to see the full recipe.</p>
+            </div>
+        </section>    
+    </div>
+   
     <hr>
     <h1>DEBUG</h1>
     <div>

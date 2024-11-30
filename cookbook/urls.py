@@ -28,5 +28,6 @@ urlpatterns = [
     path('get_ingredients/<str:name>/<int:switch>', views.get_ingredients),
     path('get_recipe/<str:list>', views.get_recipe),
     path('add', views.add, name='add'),
-    path('all-recipes', views.all_recipes, name='all-recipes')
+    path('all-recipes', views.all_recipes, name='all-recipes'),
+    path('homepage-editor', views.homepage_editor, name='editor')
 ]

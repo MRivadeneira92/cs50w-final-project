@@ -12,7 +12,13 @@ class NewRecipeForm(forms.Form):
     Steps = forms.CharField(widget=forms.Textarea)
 
 def index(request):
-    return render(request, "cookbook/homepage.html")
+    if (request.method == "POST"):
+        recipe01 = Recipe.objects.get(id=request.POST["recipe-select-01"])
+        recipe02 = Recipe.objects.get(id=request.POST["recipe-select-02"])
+        print(recipe01)
+        return render(request, "cookbook/homepage.html", {"recipe01": recipe01, "recipe02": recipe02})
+    else:
+        return render(request, "cookbook/homepage.html")
 
 def recipe_page(request, id, name):
     if (Recipe.objects.filter(id=id).exists()):
@@ -140,3 +146,8 @@ def add(request):
         return render(request, "cookbook/add.html", {"form": form, "Message": "Recipe added  succesfully"})
     
     return render(request, "cookbook/add.html", {"form": form})
+
+def homepage_editor(request):
+    all = Recipe.objects.all()
+
+    return render(request, "cookbook/homepage-editor.html", {"recipes": all})
