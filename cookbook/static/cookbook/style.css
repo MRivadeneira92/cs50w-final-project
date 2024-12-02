@@ -458,7 +458,37 @@ form button {
 }
 
 /* small screens */
-@media only screen and (min-width: 400px) {
+
+@media only screen and (max-width: 460px) {
+
+    /* homepage */
+
+    section {
+        margin-bottom: 5px;
+    }
+
+    #content-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #right-container, #main-left {
+        width: 100%;
+    }
+
+    .right-text-container {
+        height: 100%;
+    }
+
+    .right-article {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    #btn-submit {
+        display: none;
+    }
 
     .cell-container {
         width: 100%;
@@ -493,6 +523,7 @@ form button {
 }
 
 /* landscape tablets */ 
+
 @media only screen and (min-width: 1280px) {
     .cell-container {
         padding: 1rem;

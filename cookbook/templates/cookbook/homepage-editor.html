@@ -4,18 +4,22 @@
     <!--Assing right articles-->
     <form action="{% url 'index' %}" method="POST">
         {% csrf_token %}
-        <label for="recipe-select-01">Choose recipe 01</label>
-        <select name="recipe-select-01" id="recipe-select-01">
-            {% for recipe in recipes %}
-            <option value="{{recipe.id}}">{{recipe.recipe_name}}</option>
-            {% endfor %}
-        </select>
-        <label for="recipe-select-02">Choose recipe 02</label>
-        <select name="recipe-select-02" id="recipe-select-02">
-            {% for recipe in recipes %}
-            <option value="{{recipe.id}}">{{recipe.recipe_name}}</option>
-            {% endfor %}
-        </select>
+        <div style="display:block">
+            <label for="recipe-select-01">Choose recipe 01</label>
+            <select name="recipe-select-01" id="recipe-select-01">
+                {% for recipe in recipes %}
+                <option value="{{recipe.id}}">{{recipe.recipe_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="display:block">
+            <label for="recipe-select-02">Choose recipe 02</label>
+            <select name="recipe-select-02" id="recipe-select-02">
+                {% for recipe in recipes %}
+                <option value="{{recipe.id}}">{{recipe.recipe_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
         <button type="submit" class="button-style">Submit</button>
     </form>
 {% endblock %}

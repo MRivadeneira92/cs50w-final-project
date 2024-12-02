@@ -10,13 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
     var btnSubmit = document.querySelector('#btn-submit');
     var btnClear = document.querySelector("#btn-clear");
     var results = "";
+        
+    document.querySelector("#data-input").addEventListener("keyup", event => {
+        if (event.key !== "Enter") return;
+        document.querySelector("#btn-submit").click();
+        event.preventDefault();
+    })
 
     /* submit list and search for recipe */ 
   
     btnSubmit.addEventListener('click', () => {
         var dataList = []
         var dataInput = document.querySelector('#data-input');
-        var ingName = "";
+
+
         if (dataInput.value != "") {
             /* check for multiple ingredients on input */
             if (dataInput.value.includes(",") || dataInput.value.includes(", ")){
@@ -155,6 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 })
+
+/* functions */
 
 function recipeContainer(dict) {
     let container = 
