@@ -16,6 +16,7 @@
             <p id="opt-recipe">Recipe</p>
             <br>
         </div>
+        <img src="{% static '/cookbook/img/7-Scones-Thumb.jpg' %}" alt="">
 
         <p id="data-message"></p>
     </section>
@@ -59,7 +60,9 @@
             <a href="" class="overlay-link">
             {% endif %}
                 <article class="right-article">
-                    <div class="right-image">image</div>
+                    <div class="right-image">image
+                        <img src="" alt="">
+                    </div>
                     <div class="right-text-container">
                     {% if recipe01 %}
                         <h3>{{ recipe02.recipe_name }}</h3>
@@ -78,14 +81,12 @@
 
     <div id="cards-container" style="display: none;">
         <section id="ingredients">
-            <h3>Ingredients</h3>
+            <h4>Showing results for: </h4>
             <div id="ingredients-result">
-    
             </div>
         </section>
         <section id="results-container">
             <div style="display: flex; flex-direction: row;">
-                <h3>Results</h3>
                 <button id="btn-clear" class="button-style" onclick="clearContainer()" style="margin-left:5px; display:none">Clear Results</button>
             </div>
             <div id="results-cell-container">
@@ -110,4 +111,4 @@
         <p id="debug-ingredient-list"></p>
         <p id="debug-ingredient-id"></p>
     </div>
-{% endblock %}
+ {% endblock %}

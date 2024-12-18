@@ -5,11 +5,13 @@ let showResults = false;
 let noResults = false; 
 let searchSwitch = 0; /* 0 == ingredient; 1 == recipe */
 let ingDisplayList = [];
+var baseURL = "{% static 'cookbook/img/' %}"
 document.addEventListener('DOMContentLoaded', () => {
     var infoContainer = document.querySelector("#info-toggle");
     var btnSubmit = document.querySelector('#btn-submit');
     var btnClear = document.querySelector("#btn-clear");
     var results = "";
+    
         
     document.querySelector("#data-input").addEventListener("keyup", event => {
         if (event.key !== "Enter") return;
@@ -61,13 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         /* switch between card-container and content-container */
         document.querySelector("#content-container").classList.add("fade-out"); 
-        setTimeout(() => {
-            document.querySelector("#content-container").style.display = "none";
-        },3000)
-        setTimeout(() => {
-            document.querySelector("#cards-container").style.display = "block";
-
-        },4000)
+        document.querySelector("#content-container").style.display = "none";
+        document.querySelector("#cards-container").style.display = "block";
+  
 
         if (searchSwitch == 0) {
             console.log("dataList in search ing: " + dataList);
@@ -171,9 +169,11 @@ function recipeContainer(dict) {
             <div class='result-cell'>
                 <a href='/${dict['recipe_id']}/hey'>
                     <div class='result-img-container'>
+                    <img id='${dict['recipe_id']}-img' src="{{ STATIC_URL }} static '/cookbook/img/7-Scones-Thumb.jpg' %}" alt=''>
                     </div>
                     <div class='result-text'>
                         <p class='result-name' >${dict['recipe_name']}</p>
+                        <p style="font-style: italic;">${dict['recipe_time']}</p>
                         <p class='result-description'>${dict['recipe_desc']}</p>
                     </div>
                     </a>

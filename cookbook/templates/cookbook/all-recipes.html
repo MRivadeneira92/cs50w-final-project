@@ -7,10 +7,13 @@
             <div class='result-cell'>
                 <a href="/{{recipe.id}}/hey">
                     <div class='result-img-container'>
+                        {% if recipe.recipe_image %}
+                        <img src="{{recipe.recipe_image.url}}" alt="" style="width: 100%;">
+                        {% endif %}
                     </div>
                     <div class='result-text'>
                         <p class='result-name' >{{recipe.recipe_name}}</p>
-                        <p>{{recipe.recipe_time}}</p>
+                        <p style="font-style: italic;">{{recipe.recipe_time}}</p>
                         <p class='result-description'>{{recipe.recipe_description}}</p>
                     </div>
                     </a>
@@ -19,3 +22,4 @@
     {% endfor %}
     </section>
 {% endblock %}
+

@@ -10,12 +10,12 @@ class NewRecipeForm(forms.Form):
     Ingredients = forms.CharField(max_length=200)
     Type = forms.ModelMultipleChoiceField(queryset=Recipe_type.objects.all())
     Steps = forms.CharField(widget=forms.Textarea)
+    Image = forms.ImageField()
 
 def index(request):
     if (request.method == "POST"):
         recipe01 = Recipe.objects.get(id=request.POST["recipe-select-01"])
         recipe02 = Recipe.objects.get(id=request.POST["recipe-select-02"])
-        print(recipe01)
         return render(request, "cookbook/homepage.html", {"recipe01": recipe01, "recipe02": recipe02})
     else:
         return render(request, "cookbook/homepage.html")
@@ -103,7 +103,7 @@ def add(request):
     if request.method == "GET":
         form = NewRecipeForm()
     else :
-        form = NewRecipeForm(request.POST)
+        form = NewRecipeForm(request.POST, request.FILES)
         if form.is_valid():
             #process ingredient into list 
             ing_raw = form.cleaned_data["Ingredients"]
@@ -138,7 +138,8 @@ def add(request):
                 recipe_description = form.cleaned_data["Description"],
                 steps = form.cleaned_data["Steps"],
                 recipe_ammounts = ammounts,
-                recipe_time = form.cleaned_data["Time"]
+                recipe_time = form.cleaned_data["Time"],
+                recipe_image = form.cleaned_data["Image"]
             )
             recipe.save()            
             recipe.recipe_type.set(form.cleaned_data["Type"])

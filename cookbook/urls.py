@@ -30,4 +30,4 @@ urlpatterns = [
     path('add', views.add, name='add'),
     path('all-recipes', views.all_recipes, name='all-recipes'),
     path('homepage-editor', views.homepage_editor, name='editor')
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
