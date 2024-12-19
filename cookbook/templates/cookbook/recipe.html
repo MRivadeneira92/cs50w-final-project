@@ -2,23 +2,25 @@
 
 {% block body %}
     <div class="content-container">
+        <div id="recipe-title">
+            <h2>{{recipe.recipe_name}}</h2>
+            <p>{{recipe.recipe_time}}</p>
+        </div>
         <div id="recipe-image">
             {% if recipe.recipe_image %}
                 <img src="{{recipe.recipe_image.url}}" alt="image of food">
-
             {% endif %}
-        </div>
-        <div id="recipe-ingredients">
-            <h2>{{recipe.recipe_name}}</h2>
-            <p>{{recipe.recipe_time}}</p>
-            <ul>
-                {% for ammount in ammounts %}
-                <li>{{ammount}}</li>
-                {% endfor %} 
-            </ul>
+            <div id="recipe-ingredients">
+                <h4>Ingredients</h4>
+                <ul>
+                    {% for ammount in ammounts %}
+                    <li>{{ammount}}</li>
+                    {% endfor %} 
+                </ul>
+            </div>
         </div>
         <div id="recipe-steps">
-            <h3>Steps</h3>
+            <h4>Steps</h4>
             <p class="recipe-text">{{ recipe.steps }}</p>
         </div>
     </div>
