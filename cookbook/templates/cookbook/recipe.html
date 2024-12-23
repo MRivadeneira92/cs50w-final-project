@@ -7,9 +7,13 @@
             <p>{{recipe.recipe_time}}</p>
         </div>
         <div id="recipe-image">
-            {% if recipe.recipe_image %}
+            <div style="display: flex;flex-direction: column;">
+                {% if recipe.recipe_image %}
                 <img src="{{recipe.recipe_image.url}}" alt="image of food">
-            {% endif %}
+                <p id="recipe-credit">{{recipe.recipe_image_credit}}</p>
+                {% endif %}
+            </div>
+
             <div id="recipe-ingredients">
                 <h4>Ingredients</h4>
                 <ul>

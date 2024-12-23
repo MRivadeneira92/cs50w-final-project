@@ -68,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
 
         if (searchSwitch == 0) {
-            console.log("dataList in search ing: " + dataList);
 
             /*  if more than one loop until all are identified */
             if (dataList.length > 0) {
@@ -169,7 +168,7 @@ function recipeContainer(dict) {
             <div class='result-cell'>
                 <a href='/${dict['recipe_id']}/hey'>
                     <div class='result-img-container'>
-                    <img id='${dict['recipe_id']}-img' src="{{ STATIC_URL }} static '/cookbook/img/7-Scones-Thumb.jpg' %}" alt=''>
+                    <img id='${dict['recipe_id']}-img' src="${dict.recipe_image}" alt='' style="width: 100%">
                     </div>
                     <div class='result-text'>
                         <p class='result-name' >${dict['recipe_name']}</p>

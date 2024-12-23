@@ -85,7 +85,7 @@ def get_recipe(request, list):
             ingredients.append(q["ingredient_name"])
         
         recipe_type = recipe_query[i].recipe_type.values()
-        
+        print(recipe_query[i].recipe_image)
         recipe = {
             "recipe_id": recipe_query[i].id,
             "recipe_desc": recipe_query[i].recipe_description,
@@ -93,7 +93,8 @@ def get_recipe(request, list):
             "recipe_ingredients": ingredients,
             "recipe_type": str(recipe_type[0]["re_type_name"]),
             "steps": str(recipe_query[i].steps),
-            "recipe_time": recipe_query[i].recipe_time
+            "recipe_time": recipe_query[i].recipe_time,
+            "recipe_image": str(recipe_query[i].recipe_image)
         }
         result[i] = recipe
 

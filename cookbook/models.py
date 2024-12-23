@@ -28,6 +28,7 @@ class Recipe(models.Model):
     steps = models.TextField(max_length=1000)
     recipe_time = models.CharField(max_length=100)
     recipe_image= models.ImageField(null=True, blank=True, upload_to="images/")
+    recipe_image_credit = models.CharField(max_length=200)
 
     def __str__(self):
         return f"{self.id}: {self.recipe_name}"
