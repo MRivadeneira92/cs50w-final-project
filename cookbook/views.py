@@ -147,7 +147,8 @@ def add(request):
             recipe.recipe_ingredients.set(id_ing)
         return render(request, "cookbook/add.html", {"form": form, "Message": "Recipe added  succesfully"})
     
-    return render(request, "cookbook/add.html", {"form": form})
+    ingredients = Ingredient.objects.all()  
+    return render(request, "cookbook/add.html", {"form": form, "ingredients": ingredients})
 
 def homepage_editor(request):
     all = Recipe.objects.all()

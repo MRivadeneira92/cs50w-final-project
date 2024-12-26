@@ -15,6 +15,14 @@
             <button type="submit" class="button-style">Submit</button>
         </form>
         <p>Format for adding ingredients: "ammmount: ingredient, ammount: ingredient" Ej: 1 cup: sugar, 2 oz: chocolate</p>
+        <div style="height:200px;overflow:auto">
+            <ul>
+                {% for ingredient in ingredients %}
+                <li>{{ ingredient.ingredient_name }}</li>
+                {% endfor %}
+    
+            </ul> 
+        </div>
     </section>
 {% endblock %}
 

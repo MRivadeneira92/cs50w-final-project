@@ -35,13 +35,16 @@
         </section>
         <!--Right section-->
         <section id="right-container">
+            <h5 style="margin: 0 auto">Recomendations</h5>
             {% if recipe01 %}
             <a href="/{{recipe01.id}}/hey" class="overlay-link">
             {% else %}
             <a href="" class="overlay-link">
             {% endif %}
                 <article class="right-article">
-                    <div class="right-image">image</div>
+                    <div class="right-image">
+                        <img src="{{ recipe01.recipe_image }}" alt="" style="width:100%">
+                    </div>
                     <div class="right-text-container">
                         {% if recipe01 %}
                             <h3>{{ recipe01.recipe_name }}</h3>
@@ -59,8 +62,8 @@
             <a href="" class="overlay-link">
             {% endif %}
                 <article class="right-article">
-                    <div class="right-image">image
-                        <img src="" alt="">
+                    <div class="right-image">
+                        <img src="{{ recipe02.recipe_image }}" alt="" style="width:100%">
                     </div>
                     <div class="right-text-container">
                     {% if recipe01 %}
