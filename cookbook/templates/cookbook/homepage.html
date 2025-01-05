@@ -23,59 +23,71 @@
 
     <section id="content-container" class="fade-op">
         <section id="main-left">
-            <a href="" class="overlay-link">
-                <article id="main-article">
+            <article id="main-article">
+                {% if recipe_main_article %}
+                <a href="/{{recipe_main_article.id}}/hey" class="overlay-link">
+                    <div class="recipe_main_image_container">
+                        <img src="{{ recipe_main_article.recipe_image }}" alt="" style="width:100%" class="recipe_main_image">
+                    </div>
                     <div class="article-text-container">
+                        <a href="/{{recipe_main_article.id}}/hey" class="overlay-link">
+                            <h3>{{recipe_main_article.recipe_name}}</h3>
+                            <p>{{recipe_main_article.recipe_description}}</p>
+                        </a>
+                    {% else %}
                         <h3>Title</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus. 
                             Aliquam ac dolor vel dolor molestie laoreet sed eu est. Vivamus et mattis felis</p>
+                    {% endif %}
                     </div>
-                </article>
-            </a>
+                </a>
+            </article>
         </section>
         <!--Right section-->
         <section id="right-container">
-            <h5 style="margin: 0 auto">Recomendations</h5>
-            {% if recipe01 %}
-            <a href="/{{recipe01.id}}/hey" class="overlay-link">
-            {% else %}
-            <a href="" class="overlay-link">
-            {% endif %}
-                <article class="right-article">
+            <h5 style="margin: 0 auto 5px auto">Recomendations</h5>
+            <article class="right-article">
+                {% if recipe01 %}
+                <a href="/{{recipe01.id}}/hey" class="overlay-link">
+                {% else %}
+                <a href="" class="overlay-link">
+                {% endif %}
                     <div class="right-image">
                         <img src="{{ recipe01.recipe_image }}" alt="" style="width:100%">
                     </div>
                     <div class="right-text-container">
                         {% if recipe01 %}
-                            <h3>{{ recipe01.recipe_name }}</h3>
+                            <h4>{{ recipe01.recipe_name }}</h4>
                             <p>{{ recipe01.recipe_description }}</p>
                         {% else %}
-                        <h3>Title</h3>
+                        <h4>Title</h4>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus.</p>
                         {% endif %}
                     </div>
-                </article>
-            </a>
-            {% if recipe02 %}
-            <a href="/{{recipe02.id}}/hey" class="overlay-link">
-            {% else %}
-            <a href="" class="overlay-link">
-            {% endif %}
-                <article class="right-article">
+                </a>
+            </article>
+
+            <article class="right-article">
+                {% if recipe02 %}
+                <a href="/{{recipe02.id}}/hey" class="overlay-link">
+                {% else %}
+                <a href="" class="overlay-link">
+                {% endif %}
                     <div class="right-image">
                         <img src="{{ recipe02.recipe_image }}" alt="" style="width:100%">
                     </div>
                     <div class="right-text-container">
-                    {% if recipe01 %}
-                        <h3>{{ recipe02.recipe_name }}</h3>
-                        <p>{{ recipe02.recipe_description }}</p>
-                    {% else %}
-                        <h3>Title</h3>
+                        {% if recipe02 %}
+                            <h4>{{ recipe02.recipe_name }}</h4>
+                            <p>{{ recipe02.recipe_description }}</p>
+                        {% else %}
+                        <h4>Title</h4>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus.</p>
-                    {% endif %}
+                        {% endif %}
                     </div>
-                </article>
-            </a>
+                </a>
+            </article>
+
         </section>
     </section>
 

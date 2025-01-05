@@ -36,6 +36,7 @@ a {
     display: block;
     width: 100%;
     height: 100%;
+    text-decoration: none;
 }
 
 /* layout */ 
@@ -91,6 +92,12 @@ nav ul li {
     padding: 8px;
 }
 
+.navLink {  
+    text-decoration: none;
+    color: #051923;
+    padding: 0.5rem, 1rem;
+}
+
 /* main page */
 
 .bar-input {
@@ -133,6 +140,18 @@ body {
     max-width: 800px;
     display: flex;
     flex-direction: column;
+}
+
+/* homepage content */
+
+.recipe_main_image_container {
+    overflow: hidden;
+    height: 100%;
+}
+
+.recipe_main_image {
+    width: 100%;
+    height: 110%;
 }
 
 /* slider */ 
@@ -229,9 +248,8 @@ border-radius: 50%;
     }
 
     .right-article {
-        background-color: #95cece;
         width: 100%;
-        height: 200px;
+        height: 124px;
         margin-bottom: 5px;
         border-radius: 5px;
         position: relative;
@@ -240,14 +258,13 @@ border-radius: 50%;
     .right-text-container {
         position:absolute;
         right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        width: 43%;
+        top: 0;
+        width: 68%;
         padding-left: 5px;
     }
 
     .right-image {
-        width: 57%;
+        width: 32%;
         height: 100%;
         background-color: aquamarine;
         overflow: clip;
@@ -256,9 +273,9 @@ border-radius: 50%;
     .article-text-container {
         position: absolute;
         bottom: 0;
-        border-radius: 0 0 5px 5px;
         background-color: whitesmoke;
         padding: 10px 20px;
+        opacity: 0.88;
     }
 
     h3:hover {
@@ -323,7 +340,6 @@ border-radius: 50%;
 .show {
     visibility: visible !important;
 }
-
 
 .ing-container:hover {
     padding: 8px 1.5rem;
@@ -419,6 +435,11 @@ border-radius: 50%;
     margin-bottom: 3px;
 }
 
+.recipe-img {
+    width: 100%;
+    height: inherit;
+}
+
 #results-cell-container {
     min-height: 235px;
     display: flex;
@@ -461,6 +482,7 @@ border-radius: 50%;
 #recipe-ingredients h4 {
     padding-left: 30px;
 }
+
 /* add page */
 
 form div {
@@ -625,7 +647,7 @@ form button {
 
     .result-img-container {
         width: 100%;
-        height: 99px;
+        height: 85px;
     }
     
     .cell-container:hover {

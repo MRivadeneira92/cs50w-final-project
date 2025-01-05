@@ -14,9 +14,11 @@ class NewRecipeForm(forms.Form):
 
 def index(request):
     if (request.method == "POST"):
+        print(request.POST)
+        recipe_main_article = Recipe.objects.get(id=request.POST["recipe_main_article"])
         recipe01 = Recipe.objects.get(id=request.POST["recipe-select-01"])
         recipe02 = Recipe.objects.get(id=request.POST["recipe-select-02"])
-        return render(request, "cookbook/homepage.html", {"recipe01": recipe01, "recipe02": recipe02})
+        return render(request, "cookbook/homepage.html", {"recipe_main_article": recipe_main_article, "recipe01": recipe01, "recipe02": recipe02})
     else:
         return render(request, "cookbook/homepage.html")
 

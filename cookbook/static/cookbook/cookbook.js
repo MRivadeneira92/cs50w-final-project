@@ -168,7 +168,7 @@ function recipeContainer(dict) {
             <div class='result-cell'>
                 <a href='/${dict['recipe_id']}/hey'>
                     <div class='result-img-container'>
-                    <img id='${dict['recipe_id']}-img' src="${dict.recipe_image}" alt='' style="width: 100%">
+                    <img id='${dict['recipe_id']}-img' src="${dict.recipe_image}" alt='' class="recipe-img">
                     </div>
                     <div class='result-text'>
                         <p class='result-name' >${dict['recipe_name']}</p>

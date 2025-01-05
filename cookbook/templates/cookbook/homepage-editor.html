@@ -4,6 +4,14 @@
     <!--Assing right articles-->
     <form action="{% url 'index' %}" method="POST">
         {% csrf_token %}
+        <div style="display: block;">
+            <label for="recipe_main_article">Main recipe</label>
+            <select name="recipe_main_article" id="recipe_main_article">
+                {% for recipe in recipes %}
+                <option value="{{recipe.id}}">{{recipe.recipe_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
         <div style="display:block">
             <label for="recipe-select-01">Choose recipe 01</label>
             <select name="recipe-select-01" id="recipe-select-01">
