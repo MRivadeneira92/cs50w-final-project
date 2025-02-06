@@ -17,7 +17,7 @@ class Ingredient(models.Model):
     ingredient_type = models.ManyToManyField(Ingredient_type)
     
     def __str__(self):
-        return self.ingredient_name
+        return f"{self.id}; {self.ingredient_name}"
 
 class Recipe(models.Model):
     recipe_name = models.CharField(max_length=100)

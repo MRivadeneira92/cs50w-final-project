@@ -3,16 +3,15 @@ let ingredientNameList = [];
 let infoDisplay = false;
 let showResults = false; 
 let noResults = false; 
-let searchSwitch = 0; /* 0 == ingredient; 1 == recipe */
 let ingDisplayList = [];
 var baseURL = "{% static 'cookbook/img/' %}"
+
 document.addEventListener('DOMContentLoaded', () => {
     var infoContainer = document.querySelector("#info-toggle");
     var btnSubmit = document.querySelector('#btn-submit');
     var btnClear = document.querySelector("#btn-clear");
     var results = "";
     
-        
     document.querySelector("#data-input").addEventListener("keyup", event => {
         if (event.key !== "Enter") return;
         document.querySelector("#btn-submit").click();
@@ -24,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSubmit.addEventListener('click', () => {
         var dataList = []
         var dataInput = document.querySelector('#data-input');
-
 
         if (dataInput.value != "") {
             /* check for multiple ingredients on input */
@@ -52,10 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
             else {
                 dataList.push(makeUpper(dataInput.value));
             }
-            /* check searchSwitch state */
-            if (document.querySelector("#opt-checkbox").checked == true) {
-                searchSwitch = 1; 
-            }
         } 
         else if (dataInput.value == "" && showResults) {
             dataList = ingDisplayList;
@@ -65,36 +59,73 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector("#content-container").classList.add("fade-out"); 
         document.querySelector("#content-container").style.display = "none";
         document.querySelector("#cards-container").style.display = "block";
-  
+        console.log(dataList)
 
-        if (searchSwitch == 0) {
+        /* check first for recipe */
+        /* check then for recipe */
 
-            /*  if more than one loop until all are identified */
-            if (dataList.length > 0) {
-                for (let i = 0; i < dataList.length; i++) {
-                    fetch(`/get_ingredients/${dataList[i]}/${searchSwitch}`)
-                    .then(response => response.json())
-                    .then(response => {
-                        if (Object.keys(response).length === 0) {
-                            document.querySelector('#data-message').innerHTML = 'No ingredient found';
-                        }
-                        else {
-                            if (!ingredientIdList.includes(response['id'])) { 
-                                ingredientIdList.push(response['id']);
-                                ingredientNameList.push(response['name']);
-                                ingDisplayList.push(response['name']);
-                                document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
-                                document.querySelector('#data-input').value = "";
-                                /* debug */ 
-                                document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
-                                document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
-                            }        
-                        }
+        /*  if more than one loop until all are identified */
+        if (dataList.length > 0) {
+            /* Check for recipe name */
+            for (let i = 0; i < dataList.length; i++) {
+                fetch(`/get_ingredients/${dataList[i]}`)
+                .then(response => response.json())
+                .then(response => {
+                    if (Object.keys(response).length === 0) {
+                        document.querySelector('#data-message').innerHTML = 'No ingredient found';
+                    }
+                    else if(response['type'] == 0) {  /* if recipe */
+                        console.log("recipe")
+                        console.log(response)
+                        document.querySelector("#results-cell-container").innerHTML = "";
+                        document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
+                        document.querySelector('#results-cell-container').innerHTML += recipeContainer(response);
+                        setTimeout(() => {
+                            var cells = document.querySelectorAll(".cell-container");
+                            cells.forEach((cell)=> {
+                                cell.classList.remove("fade-in");
+                            })
+                        }, 600)
+                        noResults = false;
+                        btnClear.classList.add("fade-in");
+                        
+                        setTimeout(()=> {
+                            btnClear.style.display = "block";
+                        }, 700);
+                        setTimeout(()=> {
+                            btnClear.classList.remove("fade-in");
+                        }, 2000)
+
+                        /*
+
+                        ingredientIdList.push(response['id']);
+                        ingredientNameList.push(response['name']);
+                        ingDisplayList.push(response['name']);
+                        document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
+                        document.querySelector('#data-input').value = "";
+                        /* debug */ 
+                        /*
+                        document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
+                        document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
+                        */
+                    }
+                    else if (response['type'] == 1) {
+                        ingredientIdList.push(response['id']);
+                        ingredientNameList.push(response['name']);
+                        ingDisplayList.push(response['name']);
+                        document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
+                        document.querySelector('#data-input').value = "";
+                        /* debug */ 
+                        document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
+                        document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
                         if (i == (dataList.length - 1)) {
+                            console.log(ingredientIdList.length)
+
                             /* Search for recipes */ 
                             if (ingredientIdList.length != 0) {
                                 document.querySelector("#results-cell-container").innerHTML = "";
                                 if (checkResults() == true){
+
                                     fetch(`/get_recipe/${ingredientIdList}`)
                                     .then(response => response.json())
                                     .then(list => {
@@ -128,12 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                     showResults = true;
                                 } 
                             }
-                        }
-                    })
-                }
+                        }    
+                    }
+
+                })
             }
         }
-        
     })
 
     /* slider */
@@ -146,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
     /* info menu */
 
     document.querySelector("#info-toggle").addEventListener("click", () => {
-        
         const infoConSize = infoContainer.offsetHeight;
         var text = document.querySelector("#info-text");
         text.classList.toggle("show");
@@ -210,8 +240,8 @@ function makeUpper(string) {
     return result;
 }
 
-function getIngredient(string, switchOpt){
-    fetch(`/get_ingredients/${string}/${switchOpt}`)
+function getIngredient(string){
+    fetch(`/get_ingredients/${string}`)
     .then(response => response.json())
     .then(response => {
         if (Object.keys(response).length === 0) {

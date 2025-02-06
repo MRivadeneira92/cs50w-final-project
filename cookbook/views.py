@@ -39,21 +39,36 @@ def all_recipes(request):
 
 # API
 
-def get_ingredients(request, name, switch):
+def get_ingredients(request, name):
+    print("hello")
+
     result = {}
-    if (switch == 0):
-        # Check if ingredient exists
-        if (Ingredient.objects.filter(ingredient_name=name).exists()): 
-            ingredient = Ingredient.objects.get(ingredient_name=name)
-            result["id"] = ingredient.id
-            result["name"] = ingredient.ingredient_name 
-    else:
-        # Check if recipe exist 
-        if(Recipe.objects.filter(recipe_name=name).exists()):
-            recipe = Recipe.objects.get(recipe_name=name)
-            result["id]"] = recipe.id
-            result["name"] = recipe.recipe_name
-    return JsonResponse(result)
+    if(Recipe.objects.filter(recipe_name__icontains=name).exists()):
+        recipe = Recipe.objects.get(recipe_name__icontains=name)
+        result = {
+            "recipe_id": recipe.id,
+            "recipe_desc": recipe.recipe_description,
+            "recipe_name": str(recipe.recipe_name),
+            "recipe_type": str(recipe.recipe_type),
+            "steps": str(recipe.steps),
+            "recipe_time": recipe.recipe_time,
+            "recipe_image": str(recipe.recipe_image)
+        }
+        result["id"] = recipe.id
+        result["name"] = recipe.recipe_name
+        result["type"] = 0 # recipe
+        print("hey",  result)
+        return JsonResponse(result)
+    
+    # Check if ingredient exists
+    elif (Ingredient.objects.filter(ingredient_name=name).exists()): 
+        ingredient = Ingredient.objects.get(ingredient_name=name)
+        result["id"] = ingredient.id
+        result["name"] = ingredient.ingredient_name 
+        result["type"] = 1 #ingredient
+        print("yo!", result)
+        return JsonResponse(result)
+
 
 def get_recipe(request, list):
     ingredients = list.split(",")
@@ -87,7 +102,6 @@ def get_recipe(request, list):
             ingredients.append(q["ingredient_name"])
         
         recipe_type = recipe_query[i].recipe_type.values()
-        print(recipe_query[i].recipe_image)
         recipe = {
             "recipe_id": recipe_query[i].id,
             "recipe_desc": recipe_query[i].recipe_description,
