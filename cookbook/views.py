@@ -40,10 +40,9 @@ def all_recipes(request):
 # API
 
 def get_ingredients(request, name):
-    print("hello")
-
-    result = {}
+    
     if(Recipe.objects.filter(recipe_name__icontains=name).exists()):
+        result = {}
         recipe = Recipe.objects.get(recipe_name__icontains=name)
         result = {
             "recipe_id": recipe.id,
@@ -61,13 +60,17 @@ def get_ingredients(request, name):
         return JsonResponse(result)
     
     # Check if ingredient exists
-    elif (Ingredient.objects.filter(ingredient_name=name).exists()): 
-        ingredient = Ingredient.objects.get(ingredient_name=name)
-        result["id"] = ingredient.id
-        result["name"] = ingredient.ingredient_name 
-        result["type"] = 1 #ingredient
+    elif (Ingredient.objects.filter(ingredient_name__icontains=name).exists()): 
+        result = []
+        ingredients = Ingredient.objects.filter(ingredient_name__icontains=name)
+        print(ingredients)
+        for ingredient in ingredients:
+            ing = {}
+            ing["id"] = ingredient.id
+            ing["name"] = ingredient.ingredient_name 
+            result.append(ing)
         print("yo!", result)
-        return JsonResponse(result)
+        return JsonResponse(result, safe=False)
 
 
 def get_recipe(request, list):
