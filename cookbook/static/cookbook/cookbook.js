@@ -59,10 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector("#content-container").classList.add("fade-out"); 
         document.querySelector("#content-container").style.display = "none";
         document.querySelector("#cards-container").style.display = "block";
-        console.log(dataList)
 
-        /* check first for recipe */
-        /* check then for recipe */
 
         /*  if more than one loop until all are identified */
         if (dataList.length > 0) {
@@ -75,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         document.querySelector('#data-message').innerHTML = 'No ingredient found';
                     }
                     else if(response['type'] == 0) {  /* if recipe */
-                        console.log("recipe")
                         console.log(response)
                         document.querySelector("#results-cell-container").innerHTML = "";
                         document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
@@ -95,37 +91,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         setTimeout(()=> {
                             btnClear.classList.remove("fade-in");
                         }, 2000)
-
-                        /*
-
-                        ingredientIdList.push(response['id']);
-                        ingredientNameList.push(response['name']);
-                        ingDisplayList.push(response['name']);
-                        document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
-                        document.querySelector('#data-input').value = "";
-                        /* debug */ 
-                        /*
-                        document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
-                        document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
-                        */
                     }
-                    else if (response['type'] == 1) {
-                        ingredientIdList.push(response['id']);
-                        ingredientNameList.push(response['name']);
-                        ingDisplayList.push(response['name']);
-                        document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
-                        document.querySelector('#data-input').value = "";
+                    else { /* if ingredients */
+                        console.log(response)
+                        for (let i = 0; i < response.length; i++) {
+                            ingredientIdList.push(response[i]['id']);
+                            ingredientNameList.push(response[i]['name']);
+                            ingDisplayList.push(response[i]['name']);
+                            document.querySelector("#ingredients-result").innerHTML += ingredientContainer(response[i]['name'],response[i]['id']);
+                            document.querySelector('#data-input').value = "";
+                        }
+
                         /* debug */ 
                         document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
                         document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
                         if (i == (dataList.length - 1)) {
-                            console.log(ingredientIdList.length)
-
                             /* Search for recipes */ 
                             if (ingredientIdList.length != 0) {
                                 document.querySelector("#results-cell-container").innerHTML = "";
                                 if (checkResults() == true){
-
                                     fetch(`/get_recipe/${ingredientIdList}`)
                                     .then(response => response.json())
                                     .then(list => {
