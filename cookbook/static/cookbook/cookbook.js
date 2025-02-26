@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector("#content-container").style.display = "none";
         document.querySelector("#cards-container").style.display = "block";
 
+
         /*  if more than one loop until all are identified */
         if (dataList.length > 0) {
             /* Check for recipe name */
@@ -71,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         document.querySelector('#data-message').innerHTML = 'No ingredient found';
                     }
                     else if(response['type'] == 0) {  /* if recipe */
-                        console.log(response)
                         document.querySelector("#results-cell-container").innerHTML = "";
                         document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
                         document.querySelector('#results-cell-container').innerHTML += recipeContainer(response);
@@ -92,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         }, 2000)
                     }
                     else { /* if ingredients */
-                        console.log(response)
                         for (let i = 0; i < response.length; i++) {
                             ingredientIdList.push(response[i]['id']);
                             ingredientNameList.push(response[i]['name']);
@@ -104,9 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         /* debug */ 
                         document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
                         document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
+
                         if (i == (dataList.length - 1)) {
+
                             /* Search for recipes */ 
                             if (ingredientIdList.length != 0) {
+                                console.log(ingredientIdList);
                                 document.querySelector("#results-cell-container").innerHTML = "";
                                 if (checkResults() == true){
                                     fetch(`/get_recipe/${ingredientIdList}`)
@@ -149,13 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     })
-
-    /* slider */
-
-    document.querySelector("#opt-ingredient").addEventListener("click", () => {
-        document.querySelector("#opt-slider").click();
-    })
-
 
     /* info menu */
 
