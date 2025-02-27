@@ -108,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (i == (dataList.length - 1)) {
                             /* Search for recipes */ 
                             if (ingredientIdList.length != 0) {
-                                console.log(ingredientIdList);
                                 document.querySelector("#results-cell-container").innerHTML = "";
                                 if (checkResults() == true){
                                     fetch(`/get_recipe/${ingredientIdList}`)
