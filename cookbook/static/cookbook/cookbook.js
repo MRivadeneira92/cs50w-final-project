@@ -4,7 +4,7 @@ let infoDisplay = false;
 let showResults = false; 
 let noResults = false; 
 let ingDisplayList = [];
-var baseURL = "{% static 'cookbook/img/' %}"
+var searchBarCont = []
 
 document.addEventListener('DOMContentLoaded', () => {
     var infoContainer = document.querySelector("#info-toggle");
@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     /* submit list and search for recipe */ 
   
     btnSubmit.addEventListener('click', () => {
-        var dataList = []
         var dataInput = document.querySelector('#data-input');
 
         if (dataInput.value != "") {
@@ -36,23 +35,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         foo += dataInput.value[i];
                     } 
                     else {
-                        dataList.push(makeUpper(foo));
+                        searchBarCont.push(makeUpper(foo));
                         if(dataInput.value[i + 1] == " ") {
                             i++;
                         }
                         foo = "";
                     }
                     if (i == (dataInput.value.length - 1)) {
-                        dataList.push(makeUpper(foo));
+                        searchBarCont.push(makeUpper(foo));
                     }
                 }
             }
             else {
-                dataList.push(makeUpper(dataInput.value));
+                searchBarCont.push(makeUpper(dataInput.value));
             }
         } 
         else if (dataInput.value == "" && showResults) {
-            dataList = ingDisplayList;
+            searchBarCont = ingDisplayList;
         }
 
         /* switch between card-container and content-container */
@@ -62,19 +61,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         /*  if more than one loop until all are identified */
-        if (dataList.length > 0) {
+        if (searchBarCont.length > 0) {
+
             /* Check for recipe name */
-            for (let i = 0; i < dataList.length; i++) {
-                fetch(`/get_ingredients/${dataList[i]}`)
+            search_recipe()
+            for (let i = 0; i < searchBarCont.length; i++) {
+                fetch(`/get_ingredients/${searchBarCont[i]}`)
                 .then(response => response.json())
                 .then(response => {
+                    console.log(response)
                     if (Object.keys(response).length === 0) {
                         document.querySelector('#data-message').innerHTML = 'No ingredient found';
                     }
                     else if(response['type'] == 0) {  /* if recipe */
-                        console.log(response)
                         document.querySelector("#results-cell-container").innerHTML = "";
-                        document.querySelector("#ingredients-result").innerHTML += ingredientContainer(dataList[i],response['id']);
+                        document.querySelector("#ingredients-result").innerHTML += ingredientContainer(searchBarCont[i],response['id']);
                         document.querySelector('#results-cell-container').innerHTML += recipeContainer(response);
                         setTimeout(() => {
                             var cells = document.querySelectorAll(".cell-container");
@@ -92,17 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             btnClear.classList.remove("fade-in");
                         }, 2000)
                     }
-                    else { /* if ingredients */
-                        console.log(response)
-                        for (let i = 0; i < response.length; i++) {
-                            ingredientIdList.push(response[i]['id']);
-                            ingredientNameList.push(response[i]['name']);
-                            ingDisplayList.push(response[i]['name']);
-                            document.querySelector("#ingredients-result").innerHTML += ingredientContainer(response[i]['name'],response[i]['id']);
-                            document.querySelector('#data-input').value = "";
-                        }
-
-                    }
+        
                     else { /* if ingredients */
                         for (let i = 0; i < response.length; i++) {
                             ingredientIdList.push(response[i]['id']);
@@ -111,54 +102,27 @@ document.addEventListener('DOMContentLoaded', () => {
                             document.querySelector("#ingredients-result").innerHTML += ingredientContainer(response[i]['name'],response[i]['id']);
                             document.querySelector('#data-input').value = "";
                         }
-
+        
                         /* debug */ 
                         document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
                         document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
                         /* end debug */
                         
-                        if (i == (dataList.length - 1)) {
+                        if (i == (searchBarCont.length - 1)) {
                             /* Search for recipes */ 
-                            if (ingredientIdList.length != 0) {
-                                console.log(ingredientIdList);
-                                document.querySelector("#results-cell-container").innerHTML = "";
-                                if (checkResults() == true){
-                                    fetch(`/get_recipe/${ingredientIdList}`)
-                                    .then(response => response.json())
-                                    .then(list => {
-                                        if(list["recipe_id"] == "None") {
-                                            document.querySelector("#results-cell-container").innerHTML = '<p class="fade-in">No results</p>';
-                                            noResults = true;
-                                        }
-                                        else {
-                                            var numResults= Object.keys(list).length;
-                                            for (let i = 0; i < numResults; i++) {
-                                                document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
-                                            }
-                                            setTimeout(() => {
-                                                var cells = document.querySelectorAll(".cell-container");
-                                                cells.forEach((cell)=> {
-                                                    cell.classList.remove("fade-in");
-                                                })
-                                            }, 600)
-                                            noResults = false;
-                                        }  
-                                        btnClear.classList.add("fade-in");
-            
-                                        setTimeout(()=> {
-                                            btnClear.style.display = "block";
-                                        }, 700);
-                                        setTimeout(()=> {
-                                            btnClear.classList.remove("fade-in");
-                                        }, 2000)
-                                    })
-                                    showResults = true;
-                                } 
-                            }
+                            search_recipe()
                         }    
                     }
                 })
-            }
+            }  
+            btnClear.classList.add("fade-in");
+    
+            setTimeout(()=> {
+                btnClear.style.display = "block";
+            }, 700);
+            setTimeout(()=> {
+                btnClear.classList.remove("fade-in");
+            }, 2000)
         }
     })
 
@@ -180,6 +144,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* functions */
 
+function search_recipe() {
+    console.log(ingredientIdList)
+    if (ingredientIdList.length != 0) {
+        document.querySelector("#results-cell-container").innerHTML = "";
+        if (checkResults() == true){
+            fetch(`/get_recipe/${ingredientIdList}`)
+            .then(response => response.json())
+            .then(list => {
+                if(list["recipe_id"] == "None") {
+                    document.querySelector("#results-cell-container").innerHTML = '<p class="fade-in">No results</p>';
+                    noResults = true;
+                }
+                else {
+                    var numResults= Object.keys(list).length;
+                    for (let i = 0; i < numResults; i++) {
+                        document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
+                    }
+                    setTimeout(() => {
+                        var cells = document.querySelectorAll(".cell-container");
+                        cells.forEach((cell)=> {
+                            cell.classList.remove("fade-in");
+                        })
+                    }, 600)
+                    noResults = false;
+                }  
+
+            })
+            showResults = true;
+        } 
+    }
+}
 function recipeContainer(dict) {
     let container = 
         `<div class='cell-container fade-in'>
@@ -267,9 +262,10 @@ function ingredientContainer(name, id){
 
 function deleteIngredient(id) {
     let position = ingredientIdList.indexOf(id);
-    ingredientIdList.splice(position);
-    ingDisplayList.splice(position);
+    ingredientIdList.splice(position,1);
+    ingDisplayList.splice(position,1);
     document.querySelector(`#ing-${id}`).classList.add("fade-out");
+    search_recipe()
     setTimeout(()=> {
         document.querySelector(`#ing-${id}`).remove();
     },1000);

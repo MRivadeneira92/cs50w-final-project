@@ -39,7 +39,6 @@ def all_recipes(request):
 # API
 
 def get_ingredients(request, name):
-    
     if(Recipe.objects.filter(recipe_name__icontains=name).exists()):
         result = {}
         recipe = Recipe.objects.get(recipe_name__icontains=name)
