@@ -102,12 +102,25 @@ document.addEventListener('DOMContentLoaded', () => {
                             document.querySelector('#data-input').value = "";
                         }
 
+                    }
+                    else { /* if ingredients */
+                        for (let i = 0; i < response.length; i++) {
+                            ingredientIdList.push(response[i]['id']);
+                            ingredientNameList.push(response[i]['name']);
+                            ingDisplayList.push(response[i]['name']);
+                            document.querySelector("#ingredients-result").innerHTML += ingredientContainer(response[i]['name'],response[i]['id']);
+                            document.querySelector('#data-input').value = "";
+                        }
+
                         /* debug */ 
                         document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
                         document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
+                        /* end debug */
+                        
                         if (i == (dataList.length - 1)) {
                             /* Search for recipes */ 
                             if (ingredientIdList.length != 0) {
+                                console.log(ingredientIdList);
                                 document.querySelector("#results-cell-container").innerHTML = "";
                                 if (checkResults() == true){
                                     fetch(`/get_recipe/${ingredientIdList}`)
@@ -138,25 +151,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                         setTimeout(()=> {
                                             btnClear.classList.remove("fade-in");
                                         }, 2000)
-            
                                     })
                                     showResults = true;
                                 } 
                             }
                         }    
                     }
-
                 })
             }
         }
     })
-
-    /* slider */
-
-    document.querySelector("#opt-ingredient").addEventListener("click", () => {
-        document.querySelector("#opt-slider").click();
-    })
-
 
     /* info menu */
 

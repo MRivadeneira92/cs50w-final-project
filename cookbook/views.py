@@ -14,7 +14,6 @@ class NewRecipeForm(forms.Form):
 
 def index(request):
     if (request.method == "POST"):
-        print(request.POST)
         recipe_main_article = Recipe.objects.get(id=request.POST["recipe_main_article"])
         recipe01 = Recipe.objects.get(id=request.POST["recipe-select-01"])
         recipe02 = Recipe.objects.get(id=request.POST["recipe-select-02"])
@@ -40,10 +39,9 @@ def all_recipes(request):
 # API
 
 def get_ingredients(request, name):
-    print("hello")
-
-    result = {}
+    
     if(Recipe.objects.filter(recipe_name__icontains=name).exists()):
+        result = {}
         recipe = Recipe.objects.get(recipe_name__icontains=name)
         result = {
             "recipe_id": recipe.id,
@@ -57,21 +55,22 @@ def get_ingredients(request, name):
         result["id"] = recipe.id
         result["name"] = recipe.recipe_name
         result["type"] = 0 # recipe
-        print("hey",  result)
         return JsonResponse(result)
     
     # Check if ingredient exists
-    elif (Ingredient.objects.filter(ingredient_name=name).exists()): 
-        ingredient = Ingredient.objects.get(ingredient_name=name)
-        result["id"] = ingredient.id
-        result["name"] = ingredient.ingredient_name 
-        result["type"] = 1 #ingredient
-        print("yo!", result)
-        return JsonResponse(result)
+    elif (Ingredient.objects.filter(ingredient_name__icontains=name).exists()): 
+        result = []
+        ingredients = Ingredient.objects.filter(ingredient_name__icontains=name)
+        for ingredient in ingredients:
+            ing = {}
+            ing["id"] = ingredient.id
+            ing["name"] = ingredient.ingredient_name 
+            result.append(ing)
+        return JsonResponse(result, safe=False)
 
 
-def get_recipe(request, list):
-    ingredients = list.split(",")
+def get_recipe(request, id_list):
+    ingredients = id_list.split(",")
     search = []
     # turn list of str into ints
     for i in range(len(ingredients)):
@@ -79,41 +78,55 @@ def get_recipe(request, list):
 
     # Filter results 
     recipe_query = Recipe.objects.all()
-
     no_result = True
+
+
+    # search por multiple recipes #
+    final_results = {}
     for i in range(len(search)):
-        if(recipe_query.filter(recipe_ingredients=search[i]).exists()):
-            recipe_query = recipe_query.filter(recipe_ingredients=search[i])
+        mid_results = {}
+        if(recipe_query.filter(recipe_ingredients=search[i]).exists()): 
+            mid_results = set(recipe_query.filter(recipe_ingredients=search[i]).values_list("id", flat=True))
+            if (bool(final_results) == False):
+                final_results = mid_results
+            else:
+                final_results.update(mid_results)
+    final_results = list(final_results)
+    # end search #
+    recipe_results = []
+    for i in range(len(final_results)):
+        if(recipe_query.filter(id=final_results[i])):
+            foo = recipe_query.filter(id=final_results[i])
+            recipe_results.append(foo[0])
             no_result = False
-    
+        
     if no_result:
         result = {"recipe_id": "None"}
         return JsonResponse(result)
     
+    print(recipe_results)
     # turn recipe_query into a list of recipes
     result = {}
-
-    for i in range(len(recipe_query)):
+    for i in range(len(recipe_results)):
         # make list of ingredients
-        ingredients_query = recipe_query[i].recipe_ingredients.values()
+        ingredients_query = recipe_results[i].recipe_ingredients.values()
         ingredients = []
         
         for q in ingredients_query: 
             ingredients.append(q["ingredient_name"])
         
-        recipe_type = recipe_query[i].recipe_type.values()
+        recipe_type = recipe_results[i].recipe_type.values()
         recipe = {
-            "recipe_id": recipe_query[i].id,
-            "recipe_desc": recipe_query[i].recipe_description,
-            "recipe_name": str(recipe_query[i].recipe_name),
+            "recipe_id": recipe_results[i].id,
+            "recipe_desc": recipe_results[i].recipe_description,
+            "recipe_name": str(recipe_results[i].recipe_name),
             "recipe_ingredients": ingredients,
             "recipe_type": str(recipe_type[0]["re_type_name"]),
-            "steps": str(recipe_query[i].steps),
-            "recipe_time": recipe_query[i].recipe_time,
-            "recipe_image": str(recipe_query[i].recipe_image)
+            "steps": str(recipe_results[i].steps),
+            "recipe_time": recipe_results[i].recipe_time,
+            "recipe_image": str(recipe_results[i].recipe_image)
         }
         result[i] = recipe
-
     return JsonResponse(result)
 
 def add(request): 
@@ -138,7 +151,6 @@ def add(request):
             ing_list = Ingredient.objects.all()
             id_ing = []
             for b in ing:
-                print(b)
                 if ing_list.filter(ingredient_name=b.capitalize()).first() is not None:
                     c = ing_list.get(ingredient_name=b.capitalize())
                     id_ing.append(c.id)
