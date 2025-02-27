@@ -103,9 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         /* debug */ 
                         document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
                         document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
-
+                        /* end debug */
+                        
                         if (i == (dataList.length - 1)) {
-
                             /* Search for recipes */ 
                             if (ingredientIdList.length != 0) {
                                 console.log(ingredientIdList);
@@ -139,14 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                         setTimeout(()=> {
                                             btnClear.classList.remove("fade-in");
                                         }, 2000)
-            
                                     })
                                     showResults = true;
                                 } 
                             }
                         }    
                     }
-
                 })
             }
         }
