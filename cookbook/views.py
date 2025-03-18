@@ -39,6 +39,42 @@ def all_recipes(request):
 # API
 
 def get_ingredients(request, name):
+    result = {}
+    # look for exact ingredient 
+    if (Ingredient.objects.filter(ingredient_name=name).exists()): 
+        ingredient = Ingredient.objects.filter(ingredient_name=name) 
+        ing = {}
+        ing["id"] = ingredient[0].id
+        ing["name"] = ingredient[0].ingredient_name
+        result["exact"] = ing
+        
+        # look of similar ingredients
+    if (Ingredient.objects.filter(ingredient_name__icontains=name).exists()):
+        ingredients = Ingredient.objects.filter(ingredient_name__icontains=name).exclude(ingredient_name=name)
+        similar = []
+        for ingredient in ingredients:
+            ing = {}
+            ing["id"] = ingredient.id
+            ing["name"] = ingredient.ingredient_name 
+            similar.append(ing)
+        result["similar"] = similar
+    return JsonResponse(result)
+    
+    if (Recipe.objects.filter(recipe_name=name)):
+        recipe = Recipe.objects(recipe_name=name)
+        result = {
+            "recipe_id": recipe.id,
+            "recipe_desc": recipe.recipe_description,
+            "recipe_name": str(recipe.recipe_name),
+            "recipe_type": str(recipe.recipe_type),
+            "steps": str(recipe.steps),
+            "recipe_time": recipe.recipe_time,
+            "recipe_image": str(recipe.recipe_image)
+        }
+        result["id"] = recipe.id
+        result["name"] = recipe.recipe_name
+    
+    # look for similar results
     if(Recipe.objects.filter(recipe_name__icontains=name).exists()):
         result = {}
         recipe = Recipe.objects.get(recipe_name__icontains=name)
@@ -69,6 +105,7 @@ def get_ingredients(request, name):
 
 
 def get_recipe(request, id_list):
+    print("id_list: ", id_list)
     ingredients = id_list.split(",")
     search = []
     # turn list of str into ints
@@ -79,18 +116,22 @@ def get_recipe(request, id_list):
     recipe_query = Recipe.objects.all()
     no_result = True
 
-
     # search por multiple recipes #
     final_results = {}
     for i in range(len(search)):
         mid_results = {}
         if(recipe_query.filter(recipe_ingredients=search[i]).exists()): 
-            mid_results = set(recipe_query.filter(recipe_ingredients=search[i]).values_list("id", flat=True))
-            if (bool(final_results) == False):
-                final_results = mid_results
-            else:
-                final_results.update(mid_results)
+            # mid_results = set(recipe_query.filter(recipe_ingredients=search[i]).values_list("id", flat=True))
+            # if (bool(final_results) == False):
+            #    final_results = mid_results
+            #else:
+            #    final_results.update(mid_results)
+            recipe_query = recipe_query.filter(recipe_ingredients = search[i])
+            no_result = False
+            print("recipe_query: ", recipe_query)
+
     final_results = list(final_results)
+    print("final_results: ", final_results)
     # end search #
     recipe_results = []
     for i in range(len(final_results)):
@@ -100,30 +141,31 @@ def get_recipe(request, id_list):
             no_result = False
         
     if no_result:
+        print("error")
         result = {"recipe_id": "None"}
         return JsonResponse(result)
     
-    print(recipe_results)
+    print("recipe_results:" , recipe_results)
     # turn recipe_query into a list of recipes
     result = {}
-    for i in range(len(recipe_results)):
+    for i in range(len(recipe_query)):
         # make list of ingredients
-        ingredients_query = recipe_results[i].recipe_ingredients.values()
+        ingredients_query = recipe_query[i].recipe_ingredients.values()
         ingredients = []
         
         for q in ingredients_query: 
             ingredients.append(q["ingredient_name"])
         
-        recipe_type = recipe_results[i].recipe_type.values()
+        recipe_type = recipe_query[i].recipe_type.values()
         recipe = {
-            "recipe_id": recipe_results[i].id,
-            "recipe_desc": recipe_results[i].recipe_description,
-            "recipe_name": str(recipe_results[i].recipe_name),
+            "recipe_id": recipe_query[i].id,
+            "recipe_desc": recipe_query[i].recipe_description,
+            "recipe_name": str(recipe_query[i].recipe_name),
             "recipe_ingredients": ingredients,
-            "recipe_type": str(recipe_type[0]["re_type_name"]),
-            "steps": str(recipe_results[i].steps),
-            "recipe_time": recipe_results[i].recipe_time,
-            "recipe_image": str(recipe_results[i].recipe_image)
+            "recipe_type": str(recipe_query[0]["re_type_name"]),
+            "steps": str(recipe_query[i].steps),
+            "recipe_time": recipe_query[i].recipe_time,
+            "recipe_image": str(recipe_query[i].recipe_image)
         }
         result[i] = recipe
     return JsonResponse(result)

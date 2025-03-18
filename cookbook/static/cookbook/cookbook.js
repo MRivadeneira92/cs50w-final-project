@@ -1,4 +1,5 @@
-let ingredientIdList = [];
+let ingredientIdListExact = [];
+let ingredientIdListSimilar = [];
 let ingredientNameList = [];
 let infoDisplay = false;
 let showResults = false; 
@@ -17,12 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector("#btn-submit").click();
         event.preventDefault();
     })
-
     /* submit list and search for recipe */ 
   
     btnSubmit.addEventListener('click', () => {
+        searchBarCont = []
         var dataInput = document.querySelector('#data-input');
-
         if (dataInput.value != "") {
             /* check for multiple ingredients on input */
             if (dataInput.value.includes(",") || dataInput.value.includes(", ")){
@@ -50,10 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 searchBarCont.push(makeUpper(dataInput.value));
             }
         } 
-        else if (dataInput.value == "" && showResults) {
-            searchBarCont = ingDisplayList;
-        }
 
+        /* check if search query already exists */
+        
         /* switch between card-container and content-container */
         document.querySelector("#content-container").classList.add("fade-out"); 
         document.querySelector("#content-container").style.display = "none";
@@ -62,59 +61,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
         /*  if more than one loop until all are identified */
         if (searchBarCont.length > 0) {
-
-            /* Check for recipe name */
-            search_recipe()
-            for (let i = 0; i < searchBarCont.length; i++) {
-                fetch(`/get_ingredients/${searchBarCont[i]}`)
-                .then(response => response.json())
-                .then(response => {
-                    console.log(response)
-                    if (Object.keys(response).length === 0) {
-                        document.querySelector('#data-message').innerHTML = 'No ingredient found';
-                    }
-                    else if(response['type'] == 0) {  /* if recipe */
+            if (ingredientNameList.includes(searchBarCont[0]) != true) { /* if search is already in data */
+                for (let i = 0; i < searchBarCont.length; i++) {
+                    if (ingredientNameList.includes(searchBarCont[0]) != true) {
                         document.querySelector("#results-cell-container").innerHTML = "";
-                        document.querySelector("#ingredients-result").innerHTML += ingredientContainer(searchBarCont[i],response['id']);
-                        document.querySelector('#results-cell-container').innerHTML += recipeContainer(response);
-                        setTimeout(() => {
-                            var cells = document.querySelectorAll(".cell-container");
-                            cells.forEach((cell)=> {
-                                cell.classList.remove("fade-in");
-                            })
-                        }, 600)
-                        noResults = false;
-                        btnClear.classList.add("fade-in");
+                        fetch(`/get_ingredients/${searchBarCont[i]}`)
+                        .then(response => response.json())
+                        .then(response => {
+                            let strResponse = JSON.stringify(response)
+                            let fetchResults = JSON.parse(strResponse)
+                            let exactResults = fetchResults["exact"]
+                            let similarResults = fetchResults["similar"]
+
+                            if (Object.keys(response).length === 0) {
+                                document.querySelector('#data-message').innerHTML = 'No ingredient found';
+                            }
+                            else if(response['type'] == 0) {  /* if recipe */
+                                document.querySelector("#results-cell-container").innerHTML = "";
+                                document.querySelector("#ingredients-result").innerHTML += ingredientContainer(searchBarCont[i],response['id']);
+                                document.querySelector('#results-cell-container').innerHTML += recipeContainer(response);
+                                setTimeout(() => {
+                                    var cells = document.querySelectorAll(".cell-container");
+                                    cells.forEach((cell)=> {
+                                        cell.classList.remove("fade-in");
+                                    })
+                                }, 600)
+                                noResults = false;
+                                btnClear.classList.add("fade-in");
+                                
+                                setTimeout(()=> {
+                                    btnClear.style.display = "block";
+                                }, 700);
+                                setTimeout(()=> {
+                                    btnClear.classList.remove("fade-in");
+                                }, 2000)
+                            }
+                
+                            else { /* if ingredients */
+                                if (exactResults) {
+                                    ingredientIdListExact.push(exactResults['id']);
+                                    document.querySelector("#ingredients-result").innerHTML += ingredientContainer(exactResults['name'],exactResults['id']);
+                                } 
+                                if (similarResults) {
+                                    for (let j = 0; j < Object.keys(similarResults).length; j++) {
+                                        ingredientIdListSimilar.push(similarResults[j]['id'])
+                                        document.querySelector("#ingredients-results-similar").innerHTML += ingredientContainer(similarResults[j]['name'],similarResults[j]['id']);
+                                    }
+                                }
+                                ingredientNameList.push(exactResults['name']);
+                                ingDisplayList.push(response['name']);
+                                document.querySelector('#data-input').value = "";
+                      
+                                /* debug */ 
+                                document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
+                                document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdListExact;
+                                /* end debug */
+                                
+                                if (i == (searchBarCont.length - 1)) { /* when last of search bar */
+                                    /* Search for recipes */ 
+                                    search_recipe()
+                                }    
+                            }
                         
-                        setTimeout(()=> {
-                            btnClear.style.display = "block";
-                        }, 700);
-                        setTimeout(()=> {
-                            btnClear.classList.remove("fade-in");
-                        }, 2000)
+                        })
                     }
-        
-                    else { /* if ingredients */
-                        for (let i = 0; i < response.length; i++) {
-                            ingredientIdList.push(response[i]['id']);
-                            ingredientNameList.push(response[i]['name']);
-                            ingDisplayList.push(response[i]['name']);
-                            document.querySelector("#ingredients-result").innerHTML += ingredientContainer(response[i]['name'],response[i]['id']);
-                            document.querySelector('#data-input').value = "";
-                        }
-        
-                        /* debug */ 
-                        document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
-                        document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
-                        /* end debug */
-                        
-                        if (i == (searchBarCont.length - 1)) {
-                            /* Search for recipes */ 
-                            search_recipe()
-                        }    
-                    }
-                })
-            }  
+                } 
+            }
+
             btnClear.classList.add("fade-in");
     
             setTimeout(()=> {
@@ -145,11 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
 /* functions */
 
 function search_recipe() {
-    console.log(ingredientIdList)
-    if (ingredientIdList.length != 0) {
+    console.log("search_recipe ingredientIdListExact: " + ingredientIdListExact)
+    if (ingredientIdListExact.length != 0) {
         document.querySelector("#results-cell-container").innerHTML = "";
         if (checkResults() == true){
-            fetch(`/get_recipe/${ingredientIdList}`)
+            fetch(`/get_recipe/${ingredientIdListExact}`)
             .then(response => response.json())
             .then(list => {
                 if(list["recipe_id"] == "None") {
@@ -169,12 +182,12 @@ function search_recipe() {
                     }, 600)
                     noResults = false;
                 }  
-
             })
             showResults = true;
         } 
     }
 }
+
 function recipeContainer(dict) {
     let container = 
         `<div class='cell-container fade-in'>
@@ -201,13 +214,17 @@ function clearContainer() {
     showResults = false;
     noResults = false; 
     document.querySelector("#btn-clear").classList.add("fade-out");
-    ingredientIdList = [];
+    ingredientIdListExact = [];
+    ingredientNameList = [];
     ingDisplayList = [];
+    searchBarCont = [];
     document.querySelector('#ingredients-result').innerHTML = "";
     setTimeout(() => {
         document.querySelector("#btn-clear").classList.remove("fade-out");
         document.querySelector("#btn-clear").style.display= "none";
     }, 1000);
+    console.log("ingredientIdListExact: " + ingredientIdListExact)
+
 }
 
 function makeUpper(string) {
@@ -231,14 +248,14 @@ function getIngredient(string){
             document.querySelector('#data-message').innerHTML = 'No ingredient found';
         }
         else {
-            if (!ingredientIdList.includes(response['id'])) { 
-                ingredientIdList.push(response['id']);
+            if (!ingredientIdListExact.includes(response['id'])) { 
+                ingredientIdListExact.push(response['id']);
                 ingredientNameList.push(response['name']);
                 document.querySelector("#ingredients-result").innerHTML += ingredientContainer(string,response['id']);
                 document.querySelector('#data-input').value = "";
                 /* debug */ 
                 document.querySelector('#debug-ingredient-list').innerHTML = ingredientNameList;
-                document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdList;
+                document.querySelector("#debug-ingredient-id").innerHTML = ingredientIdListExact;
             }        
         }
     })
@@ -261,10 +278,11 @@ function ingredientContainer(name, id){
 }
 
 function deleteIngredient(id) {
-    let position = ingredientIdList.indexOf(id);
-    ingredientIdList.splice(position,1);
+    let position = ingredientIdListExact.indexOf(id);
+    ingredientIdListExact.splice(position,1);
     ingDisplayList.splice(position,1);
     document.querySelector(`#ing-${id}`).classList.add("fade-out");
+    document.querySelector("#results-cell-container").innerHTML = "";
     search_recipe()
     setTimeout(()=> {
         document.querySelector(`#ing-${id}`).remove();

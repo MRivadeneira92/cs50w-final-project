@@ -131,7 +131,6 @@ body {
 }
 
 #ingredients {
-    height: 87px;
     margin-bottom: 0.5rem;
 }
 
@@ -252,7 +251,7 @@ body {
     transition: visibility 0.3s ease-in-out;
 }
 
-#ingredients-result {
+.ing-bar {
     display: flex;
     flex-wrap: wrap;
     height: auto;
