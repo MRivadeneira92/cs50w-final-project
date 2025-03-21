@@ -98,17 +98,19 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                 
                             else { /* if ingredients */
+                                console.log(Object.keys(similarResults).length > 0)
                                 if (exactResults) {
                                     ingredientIdListExact.push(exactResults['id']);
-                                    document.querySelector("#ingredients-result").innerHTML += ingredientContainer(exactResults['name'],exactResults['id']);
+                                    document.querySelector("#ingredients-result").innerHTML += ingredientContainer(exactResults['name'],exactResults['id'], "exact");
+                                    ingredientNameList.push(exactResults['name']);
                                 } 
-                                if (similarResults) {
+                                if ((Object.keys(similarResults).length > 0) == true) {
+                                    document.querySelector("#ingredients-results-similar-title").style.display = "block";
                                     for (let j = 0; j < Object.keys(similarResults).length; j++) {
                                         ingredientIdListSimilar.push(similarResults[j]['id'])
-                                        document.querySelector("#ingredients-results-similar").innerHTML += ingredientContainer(similarResults[j]['name'],similarResults[j]['id']);
+                                        document.querySelector("#ingredients-results-similar").innerHTML += ingredientContainer(similarResults[j]['name'],similarResults[j]['id'], "similar");
                                     }
                                 }
-                                ingredientNameList.push(exactResults['name']);
                                 ingDisplayList.push(response['name']);
                                 document.querySelector('#data-input').value = "";
                       
@@ -158,33 +160,42 @@ document.addEventListener('DOMContentLoaded', () => {
 /* functions */
 
 function search_recipe() {
-    console.log("search_recipe ingredientIdListExact: " + ingredientIdListExact)
-    if (ingredientIdListExact.length != 0) {
-        document.querySelector("#results-cell-container").innerHTML = "";
-        if (checkResults() == true){
-            fetch(`/get_recipe/${ingredientIdListExact}`)
-            .then(response => response.json())
-            .then(list => {
-                if(list["recipe_id"] == "None") {
-                    document.querySelector("#results-cell-container").innerHTML = '<p class="fade-in">No results</p>';
-                    noResults = true;
-                }
-                else {
-                    var numResults= Object.keys(list).length;
-                    for (let i = 0; i < numResults; i++) {
-                        document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
+    let idSearch = []
+    for (i= 0; i < 2; i++) {
+        if (i == 0) {
+            idSearch = ingredientIdListExact;
+        } else if (i == 1) {
+            idSearch = ingredientIdListSimilar;
+        }
+        console.log("idSearch: " + idSearch)
+
+        if (idSearch.length != 0) {
+            document.querySelector("#results-cell-container").innerHTML = "";
+            if (checkResults() == true){
+                fetch(`/get_recipe/${idSearch}`)
+                .then(response => response.json())
+                .then(list => {
+                    if(list["recipe_id"] == "None") {
+                        document.querySelector("#results-cell-container").innerHTML = '<p class="fade-in">No results</p>';
+                        noResults = true;
                     }
-                    setTimeout(() => {
-                        var cells = document.querySelectorAll(".cell-container");
-                        cells.forEach((cell)=> {
-                            cell.classList.remove("fade-in");
-                        })
-                    }, 600)
-                    noResults = false;
-                }  
-            })
-            showResults = true;
-        } 
+                    else {
+                        var numResults= Object.keys(list).length;
+                        for (let i = 0; i < numResults; i++) {
+                            document.querySelector('#results-cell-container').innerHTML += recipeContainer(list[i]);
+                        }
+                        setTimeout(() => {
+                            var cells = document.querySelectorAll(".cell-container");
+                            cells.forEach((cell)=> {
+                                cell.classList.remove("fade-in");
+                            })
+                        }, 600)
+                        noResults = false;
+                    }  
+                })
+                showResults = true;
+            } 
+        }
     }
 }
 
@@ -219,6 +230,8 @@ function clearContainer() {
     ingDisplayList = [];
     searchBarCont = [];
     document.querySelector('#ingredients-result').innerHTML = "";
+    document.querySelector('#ingredients-results-similar').innerHTML = "";
+    document.querySelector("#ingredients-results-similar-title").style.display = "none";
     setTimeout(() => {
         document.querySelector("#btn-clear").classList.remove("fade-out");
         document.querySelector("#btn-clear").style.display= "none";
@@ -268,25 +281,36 @@ function showInfo(){
     infoText.classList.add("showInfo");
 }
 
-function ingredientContainer(name, id){ 
+function ingredientContainer(name, id, relation){ 
     var html = 
-        `<div class="ing-container" onClick="deleteIngredient(${id})" id="ing-${id}">
+        `<div class="ing-container" onClick="deleteIngredient(${id}, '${relation}')" id="ing-${id}">
             <p>${name}</p>
             <span> x</span>
         </div>`
     return html;
 }
 
-function deleteIngredient(id) {
-    let position = ingredientIdListExact.indexOf(id);
-    ingredientIdListExact.splice(position,1);
-    ingDisplayList.splice(position,1);
+function deleteIngredient(id, relation) {
+    if (relation == "exact") {
+        let position = ingredientIdListExact.indexOf(id);
+        ingredientIdListExact.splice(position,1);
+        ingDisplayList.splice(position,1);
+    } else if (relation == "similar") {
+        let position = ingredientIdListSimilar.indexOf(id);
+        ingredientIdListSimilar.splice(position,1);
+        ingDisplayList.splice(position,1);
+    }
     document.querySelector(`#ing-${id}`).classList.add("fade-out");
     document.querySelector("#results-cell-container").innerHTML = "";
     search_recipe()
     setTimeout(()=> {
         document.querySelector(`#ing-${id}`).remove();
     },1000);
+    setTimeout(()=> {
+        if (document.querySelector("#ingredients-results-similar").innerHTML == "") {
+            document.querySelector("#ingredients-results-similar-title").style.display = "none";
+        }
+    },1200)
 }
 
 function checkResults(){
