@@ -41,27 +41,28 @@ def all_recipes(request):
 def get_ingredients(request, name):
     result = {}
     # look for exact ingredient 
-    if (Ingredient.objects.filter(ingredient_name=name).exists()): 
-        ingredient = Ingredient.objects.filter(ingredient_name=name) 
-        ing = {}
-        ing["id"] = ingredient[0].id
-        ing["name"] = ingredient[0].ingredient_name
-        result["exact"] = ing
-        
-        # look of similar ingredients
-    if (Ingredient.objects.filter(ingredient_name__icontains=name).exists()):
-        ingredients = Ingredient.objects.filter(ingredient_name__icontains=name).exclude(ingredient_name=name)
-        similar = []
-        for ingredient in ingredients:
+    if (Ingredient.objects.filter(ingredient_name__icontains=name).exists()): 
+        if (Ingredient.objects.filter(ingredient_name=name).exists()): 
+            ingredient = Ingredient.objects.filter(ingredient_name=name) 
             ing = {}
-            ing["id"] = ingredient.id
-            ing["name"] = ingredient.ingredient_name 
-            similar.append(ing)
-        result["similar"] = similar
-    return JsonResponse(result)
+            ing["id"] = ingredient[0].id
+            ing["name"] = ingredient[0].ingredient_name
+            result["exact"] = ing
+            
+            # look of similar ingredients
+        if (Ingredient.objects.filter(ingredient_name__icontains=name).exists()):
+            ingredients = Ingredient.objects.filter(ingredient_name__icontains=name).exclude(ingredient_name=name)
+            similar = []
+            for ingredient in ingredients:
+                ing = {}
+                ing["id"] = ingredient.id
+                ing["name"] = ingredient.ingredient_name 
+                similar.append(ing)
+            result["similar"] = similar
+        return JsonResponse(result)
     
     if (Recipe.objects.filter(recipe_name=name)):
-        recipe = Recipe.objects(recipe_name=name)
+        recipe = Recipe.objects.get(recipe_name=name)
         result = {
             "recipe_id": recipe.id,
             "recipe_desc": recipe.recipe_description,
@@ -102,6 +103,8 @@ def get_ingredients(request, name):
             ing["name"] = ingredient.ingredient_name 
             result.append(ing)
         return JsonResponse(result, safe=False)
+    
+    return JsonResponse(result)
 
 
 def get_recipe(request, id_list):
@@ -119,16 +122,10 @@ def get_recipe(request, id_list):
     # search por multiple recipes #
     final_results = {}
     for i in range(len(search)):
-        mid_results = {}
-        if(recipe_query.filter(recipe_ingredients=search[i]).exists()): 
-            # mid_results = set(recipe_query.filter(recipe_ingredients=search[i]).values_list("id", flat=True))
-            # if (bool(final_results) == False):
-            #    final_results = mid_results
-            #else:
-            #    final_results.update(mid_results)
-            recipe_query = recipe_query.filter(recipe_ingredients = search[i])
-            no_result = False
-            print("recipe_query: ", recipe_query)
+            if(recipe_query.filter(recipe_ingredients=search[i]).exists()): 
+                recipe_query = recipe_query.filter(recipe_ingredients = search[i])
+                no_result = False
+                print("recipe_query: ", recipe_query)
 
     final_results = list(final_results)
     print("final_results: ", final_results)
