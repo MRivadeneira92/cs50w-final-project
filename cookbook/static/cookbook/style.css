@@ -15,13 +15,27 @@ ul  {
     padding-left: 0;
 }
 
-html, body {
+html {
+    height: 100vh;
+}
+
+body {
     height: 100%;
-    background-color: #FFF6F6;
+    background-color: #d5dad5;
+}
+
+main {
+    height: 100%;
 }
 
 header {
     font-family: "roboto";
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: var(--bs-font-sans-serif);
 }
 
 section {
@@ -37,6 +51,11 @@ a {
     width: 100%;
     height: 100%;
     text-decoration: none;
+}
+
+.recipe_main_image {
+    width: 110%;
+    height: 110%;
 }
 
 /* layout */ 
@@ -145,12 +164,16 @@ body {
 
 .recipe_main_image_container {
     overflow: hidden;
-    height: 100%;
+    height: 78%;
+}
+
+.img-containers {
+    display: flex;
 }
 
 .recipe_main_image {
     width: 100%;
-    height: 110%;
+    height: 100%;
 }
 
 /* Content container */
@@ -168,7 +191,7 @@ body {
     #main-left {
         background-color: #2196F3;
         width:75%;
-        height: 405px;
+        height: 500px;
         margin-right: 5px;
         border-radius: 5px;
     }
@@ -337,7 +360,6 @@ body {
     background-color: #e2eafc;
     border-radius: 5px;
     height: 241px;
-    padding: 1rem; 
     overflow: clip;
     color: black;
     box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
@@ -386,17 +408,13 @@ body {
     max-width: 1080px;
 }
 
-/* Recipe Page */ 
-
-#recipe-title {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.result-text {
+    padding: 0.2rem 1rem 1rem 1rem;
 }
 
+/* Recipe Page */ 
+
 #recipe-image {
-    display: flex;
-    flex-direction: row;
     margin-bottom: 10px;
 }
 
@@ -430,6 +448,7 @@ form button {
 
 #menu-container {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
 }
 
@@ -485,6 +504,10 @@ form button {
         display: none;
     }
 
+    #btn-clear {
+        margin-bottom: 10px;
+    }
+
     .cell-container {
         width: 100%;
         height: 100%;
@@ -492,6 +515,7 @@ form button {
     
     .result-cell {
         width: 100%;
+        height: 128px;
     }
 
     .result-cell a {
@@ -546,8 +570,10 @@ form button {
         padding-top: 3px;
     }
 
-    #recipe-ingredients h4, 
-
+    .recipe-text {
+        padding-bottom: 10%;
+    }
+    
     ul {
         padding-left: 0;
     }
@@ -580,14 +606,14 @@ form button {
 
     .result-img-container {
         width: 100%;
-        height: 85px;
+        height: 107px;
     }
     
     .cell-container:hover {
         padding: 0.8rem;
     }
     
-    .result-cell:hover{
+    /*.result-cell:hover{
         padding: 1.2rem;
-    } 
+    } */
 }

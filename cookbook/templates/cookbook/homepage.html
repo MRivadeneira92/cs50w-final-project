@@ -16,14 +16,19 @@
                 {% if recipe_main_article %}
                 <a href="/{{recipe_main_article.id}}/hey" class="overlay-link">
                     <div class="recipe_main_image_container">
-                        <img src="{{ recipe_main_article.recipe_image }}" alt="" style="width:100%" class="recipe_main_image">
+                        <img src="{{ recipe_main_article.recipe_image }}" alt=""  class="recipe_main_image">
                     </div>
                     <div class="article-text-container">
                         <a href="/{{recipe_main_article.id}}/hey" class="overlay-link">
+                            <p>New!</p>
                             <h3>{{recipe_main_article.recipe_name}}</h3>
                             <p>{{recipe_main_article.recipe_description}}</p>
                         </a>
                     {% else %}
+                        <div class="recipe_main_image_container">
+                            <img src="{{ recipe_main_article.recipe_image }}" alt=""  class="recipe_main_image">
+                        </div>
+                        <p>New!</p>
                         <h3>Title</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus. 
                             Aliquam ac dolor vel dolor molestie laoreet sed eu est. Vivamus et mattis felis</p>
@@ -42,7 +47,7 @@
                 <a href="" class="overlay-link">
                 {% endif %}
                     <div class="right-image">
-                        <img src="{{ recipe01.recipe_image }}" alt="" style="width:100%">
+                        <img src="{{ recipe01.recipe_image }}" alt="" class="recipe_main_image">
                     </div>
                     <div class="right-text-container">
                         {% if recipe01 %}
@@ -63,7 +68,7 @@
                 <a href="" class="overlay-link">
                 {% endif %}
                     <div class="right-image">
-                        <img src="{{ recipe02.recipe_image }}" alt="" style="width:100%">
+                        <img src="{{ recipe02.recipe_image }}" alt="" class="recipe_main_image">
                     </div>
                     <div class="right-text-container">
                         {% if recipe02 %}
