@@ -184,6 +184,7 @@ def add(request):
             ing = []
             for text in a :
                 bar = text.split(":")
+                print("heelloo:",  bar)
                 ing.append(bar[1].strip(" "))
 
             ing_list = Ingredient.objects.all()
