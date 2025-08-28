@@ -11,77 +11,141 @@
      <!--Homepage A: Content-->
 
     <section id="content-container" class="fade-op">
-        <section id="main-left">
-            <article id="main-article">
-                {% if recipe_main_article %}
-                <a href="/{{recipe_main_article.id}}/hey" class="overlay-link">
-                    <div class="recipe_main_image_container">
-                        <img src="{{ recipe_main_article.recipe_image }}" alt=""  class="recipe_main_image centering-image">
-                    </div>
-                    <div class="article-text-container">
-                        <a href="/{{recipe_main_article.id}}/hey" class="overlay-link">
-                            <p>New!</p>
-                            <h3>{{recipe_main_article.recipe_name}}</h3>
-                            <p>{{recipe_main_article.recipe_description}}</p>
-                        </a>
-                    {% else %}
+        <section class="section-container">
+            <section id="main-left">
+                <article id="main-article">
+                    {% if recipe_main_article %}
+                    <a href="/{{recipe_main_article.id}}/hey" class="overlay-link">
                         <div class="recipe_main_image_container">
                             <img src="{{ recipe_main_article.recipe_image }}" alt=""  class="recipe_main_image">
                         </div>
-                        <p>New!</p>
-                        <h3>Title</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus. 
-                            Aliquam ac dolor vel dolor molestie laoreet sed eu est. Vivamus et mattis felis</p>
+                        <div class="article-text-container">
+                            <a href="/{{recipe_main_article.id}}/hey" class="overlay-link">
+                                <p>New!</p>
+                                <h3>{{recipe_main_article.recipe_name}}</h3>
+                                <p>{{recipe_main_article.recipe_description}}</p>
+                            </a>
+                        {% else %}
+                            <div class="recipe_main_image_container">
+                                <img src="{{ recipe_main_article.recipe_image }}" alt=""  class="recipe_main_image">
+                            </div>
+                            <p>New!</p>
+                            <h3>Title</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus. 
+                                Aliquam ac dolor vel dolor molestie laoreet sed eu est. Vivamus et mattis felis</p>
+                        {% endif %}
+                        </div>
+                    </a>
+                </article>
+            </section>
+            <!--Right section-->
+            <section id="right-container">
+                <h5 style="margin: 0 auto 5px auto">Recomendations</h5>
+                <article class="right-article">
+                    {% if recipe01 %}
+                    <a href="/{{recipe01.id}}/hey" class="overlay-link">
+                    {% else %}
+                    <a href="" class="overlay-link flex-row">
                     {% endif %}
-                    </div>
-                </a>
-            </article>
+                        <div class="right-image">
+                            <img src="{{ recipe01.recipe_image }}" alt="" class="recipe_main_image">
+                        </div>
+                        <div class="right-text-container">
+                            {% if recipe01 %}
+                                <h4>{{ recipe01.recipe_name }}</h4>
+                                <p>{{ recipe01.recipe_description }}</p>
+                            {% else %}
+                            <h4>Title</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus.</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                </article>
+
+                <article class="right-article">
+                    {% if recipe02 %}
+                    <a href="/{{recipe02.id}}/hey" class="overlay-link">
+                    {% else %}
+                    <a href="" class="overlay-link">
+                    {% endif %}
+                        <div class="right-image">
+                            <img src="{{ recipe02.recipe_image }}" alt="" class="recipe_main_image">
+                        </div>
+                        <div class="right-text-container">
+                            {% if recipe02 %}
+                                <h4>{{ recipe02.recipe_name }}</h4>
+                                <p>{{ recipe02.recipe_description }}</p>
+                            {% else %}
+                            <h4>Title</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus.</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                </article>
+            </section>
         </section>
-        <!--Right section-->
-        <section id="right-container">
-            <h5 style="margin: 0 auto 5px auto">Recomendations</h5>
-            <article class="right-article">
-                {% if recipe01 %}
-                <a href="/{{recipe01.id}}/hey" class="overlay-link">
-                {% else %}
-                <a href="" class="overlay-link">
-                {% endif %}
-                    <div class="right-image">
-                        <img src="{{ recipe01.recipe_image }}" alt="" class="recipe_main_image">
-                    </div>
-                    <div class="right-text-container">
-                        {% if recipe01 %}
-                            <h4>{{ recipe01.recipe_name }}</h4>
-                            <p>{{ recipe01.recipe_description }}</p>
-                        {% else %}
-                        <h4>Title</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus.</p>
-                        {% endif %}
-                    </div>
-                </a>
-            </article>
 
-            <article class="right-article">
-                {% if recipe02 %}
-                <a href="/{{recipe02.id}}/hey" class="overlay-link">
-                {% else %}
-                <a href="" class="overlay-link">
-                {% endif %}
-                    <div class="right-image">
-                        <img src="{{ recipe02.recipe_image }}" alt="" class="recipe_main_image">
+        <section id="second-main-page">
+            <h3>New recipes</h3>
+            <div style="display:flex;flex-direction: row;">
+                
+                    {% for recipe in side_recipes %}
+                    <div class="second-main-recipe-container">
+                        <div class='second-main-result-cell'>
+                            <a href="/{{recipe.id}}/hey">
+                                <div class='second-result-img-container'>
+                                    <img id='' src="{{recipe.recipe_image}}" alt='' class="recipe-img">
+                                </div>
+                                <div class='result-text'>
+                                    <h4>{{recipe.recipe_name}}</h4>
+                                    <p class='result-description'>{{recipe.recipe_description}}</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                    <div class="right-text-container">
-                        {% if recipe02 %}
-                            <h4>{{ recipe02.recipe_name }}</h4>
-                            <p>{{ recipe02.recipe_description }}</p>
-                        {% else %}
-                        <h4>Title</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus.</p>
-                        {% endif %}
+                    {% endfor %}
+                <!--
+                <div class="second-main-recipe-container">
+                    <div class='second-main-result-cell'>
+                        <a href=''>
+                            <div class='second-result-img-container'>
+                                <img id='' src="" alt='' class="recipe-img">
+                            </div>
+                            <div class='result-text'>
+                                <h4>Name</h4>
+                                <p class='result-description'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus.</p>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </article>
-
+                </div>
+                <div class="second-main-recipe-container">
+                    <div class='second-main-result-cell'>
+                        <a href=''>
+                            <div class='second-result-img-container'>
+                            <img id='' src="" alt='' class="recipe-img">
+                            </div>
+                            <div class='result-text'>
+                                <h4>Name</h4>
+                                <p class='result-description'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="second-main-recipe-container">
+                    <div class='second-main-result-cell'>
+                        <a href=''>
+                            <div class='second-result-img-container'>
+                            <img id='' src="" alt='' class="recipe-img">
+                            </div>
+                            <div class='result-text'>
+                                <h4>Name</h4>
+                                <p class='result-description'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus eu libero nec luctus.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                -->
+            </div>
         </section>
     </section>
 

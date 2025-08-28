@@ -32,3 +32,13 @@ class Recipe(models.Model):
 
     def __str__(self):
         return f"{self.id}: {self.recipe_name}"
+
+class LandingPage(models.Model): 
+    main_article = models.CharField(max_length=5)
+    right_article01 = models.CharField(max_length=5)
+    right_article02 = models.CharField(max_length=5)
+    second_article01 = models.CharField(max_length=5)
+    second_article02 = models.CharField(max_length=5)
+    second_article03 = models.CharField(max_length=5)
+    second_article04 = models.CharField(max_length=5)
+    

@@ -13,13 +13,16 @@ class NewRecipeForm(forms.Form):
     Image = forms.ImageField()
 
 def index(request):
+    all_recipes = Recipe.objects.count()
+    new_recipes = Recipe.objects.all()[(all_recipes - 4):all_recipes]    
+
     if (request.method == "POST"):
         recipe_main_article = Recipe.objects.get(id=request.POST["recipe_main_article"])
         recipe01 = Recipe.objects.get(id=request.POST["recipe-select-01"])
         recipe02 = Recipe.objects.get(id=request.POST["recipe-select-02"])
-        return render(request, "cookbook/homepage.html", {"recipe_main_article": recipe_main_article, "recipe01": recipe01, "recipe02": recipe02})
-    else:
-        return render(request, "cookbook/homepage.html")
+        return render(request, "cookbook/homepage.html", {"recipe_main_article": recipe_main_article, "recipe01": recipe01, "recipe02": recipe02, "side_recipes": new_recipes})
+    else:     
+        return render(request, "cookbook/homepage.html", {"side_recipes": new_recipes})
 
 def recipe_page(request, id, name):
     if (Recipe.objects.filter(id=id).exists()):
@@ -122,10 +125,10 @@ def get_recipe(request, id_list):
     # search por multiple recipes #
     final_results = {}
     for i in range(len(search)):
-            if(recipe_query.filter(recipe_ingredients=search[i]).exists()): 
-                recipe_query = recipe_query.filter(recipe_ingredients = search[i])
-                no_result = False
-                print("recipe_query: ", recipe_query)
+        if(recipe_query.filter(recipe_ingredients=search[i]).exists()): 
+            recipe_query = recipe_query.filter(recipe_ingredients = search[i])
+            no_result = False
+            print("recipe_query: ", recipe_query)
 
     final_results = list(final_results)
     print("final_results: ", final_results)

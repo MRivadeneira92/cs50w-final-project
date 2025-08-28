@@ -39,7 +39,6 @@ pre {
     font-family: var(--bs-font-sans-serif);
 }
 
-
 section {
     font-family: "arial";
 }
@@ -51,6 +50,12 @@ a {
 .centering-image {
     object-position: 0 -90px;
 }
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
 
 .overlay-link {
     display: block;
@@ -151,6 +156,12 @@ body {
     padding-bottom: 10vh;
 }
 
+.section-container  {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
 #ingredients {
     margin-bottom: 0.5rem;
 }
@@ -179,12 +190,36 @@ body {
     object-fit: cover;
 }
 
+.down-container.image {
+    height: 51%;
+}
+
+.second-main-recipe-container {
+    width: 25%;
+    margin: 0 20px;
+}
+
+.second-main-result-cell {
+    border: 1px solid #eee;
+}
+
+.second-result-img-container {
+    height: 206px;
+}
+
+#second-main-page article {
+    margin: 0 10px;
+}
+
+#second-main-page article a {
+    flex-direction: column;
+}
+
 /* Content container */
 
     #content-container {
         display: flex;
-        flex-direction: row;
-        padding-bottom: 10vh;
+        flex-direction: column;
     }
 
     .fade-op {
@@ -208,22 +243,18 @@ body {
 
     .right-article {
         width: 100%;
-        height: 124px;
         margin-bottom: 5px;
         border-radius: 5px;
         position: relative;
     }
 
     .right-text-container {
-        position:absolute;
-        right: 0;
-        top: 0;
         width: 68%;
         padding-left: 5px;
     }
 
     .right-image {
-        width: 32%;
+        width: 61%;
         height: 100%;
         background-color: aquamarine;
         overflow: clip;
@@ -232,9 +263,10 @@ body {
     .article-text-container {
         position: absolute;
         bottom: 0;
-        background-color: whitesmoke;
         padding: 10px 20px;
         opacity: 0.88;
+        background: #fafaff;
+        background: linear-gradient(2deg, rgba(250, 250, 255, 1) 47%, rgba(0, 0, 0, 0) 100%);
     }
 
     h3:hover {
@@ -246,8 +278,12 @@ body {
         height: 100%;
     }
 
+    .right-article a {
+        display: flex;
+    }
 
 /* info div */
+
 #info-toggle {
     height: 48px;
     overflow: hidden;
@@ -489,8 +525,17 @@ form button {
         margin-bottom: 5px;
     }
 
-    #content-container {
-        display: flex;
+    nav {
+        flex-direction: column;
+    }
+
+    nav ul {
+        margin: 0 auto;
+        list-style: none;
+        display: none;
+    }
+
+    .section-container {
         flex-direction: column;
     }
 
@@ -509,6 +554,10 @@ form button {
     .right-article {
         display: flex;
         flex-direction: column;
+    }
+
+    .right-article a {
+        display: block;
     }
 
     .right-image {

@@ -18,8 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector("#btn-submit").click();
         event.preventDefault();
     })
+
+    /* Load content on landing page */
+
+    /* Get the newest recipes */
+
+    fetch("/get_recipe")
     /* submit list and search for recipe */ 
-  
+    
     btnSubmit.addEventListener('click', () => {
         searchBarCont = []
         var dataInput = document.querySelector('#data-input');
@@ -141,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         }
         document.querySelector('#data-input').value = "";
-
     })
 
     /* info menu */
@@ -215,8 +220,8 @@ function recipeContainer(dict) {
                         <p style="font-style: italic;">${dict['recipe_time']}</p>
                         <p class='result-description'>${dict['recipe_desc']}</p>
                     </div>
-                    </a>
-                </div>
+                </a>
+            </div>
         </div>`
     return container
 }
