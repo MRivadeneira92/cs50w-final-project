@@ -8,6 +8,9 @@
     font-family: "roboto";
 }
 
+a {
+    text-decoration: none;
+}
 p {
     margin-bottom: 0 !important;
 }
@@ -195,8 +198,7 @@ body {
 }
 
 .second-main-recipe-container {
-    width: 25%;
-    margin: 0 20px;
+    margin: 0 10px;
 }
 
 .second-main-result-cell {
@@ -546,6 +548,16 @@ form button {
         padding: 0;
     }
 
+    .homepage-container {
+        width: 100%;
+        height: auto;
+        object-position: 0%;
+        padding: 0;
+    }
+
+    .second-main-recipe-container {
+        margin: 0;
+    }
     .right-text-container {
         height: 100%;
         position: relative;
@@ -679,8 +691,5 @@ form button {
     .cell-container:hover {
         padding: 0.8rem;
     }
-    
-    /*.result-cell:hover{
-        padding: 1.2rem;
-    } */
+
 }
