@@ -16,13 +16,32 @@ def index(request):
     all_recipes = Recipe.objects.count()
     new_recipes = Recipe.objects.all()[(all_recipes - 4):all_recipes]    
 
+    #Look for recipes that include this ingredient
+    one_ing = "butter"
+    same_ingredient = []
+    # look for exact ingredient 
+    if (Ingredient.objects.filter(ingredient_name__icontains=one_ing).exists()): 
+        if (Ingredient.objects.filter(ingredient_name=one_ing).exists()): 
+            ingredient = Ingredient.objects.filter(ingredient_name=one_ing) 
+            same_ingredient.append(ingredient.id)
+            
+            # look of similar ingredients
+        if (Ingredient.objects.filter(ingredient_name__icontains=one_ing).exists()):
+            ingredients = Ingredient.objects.filter(ingredient_name__icontains=one_ing).exclude(ingredient_name=one_ing)
+            for ingredient in ingredients:
+                same_ingredient.append(ingredient.id)
+    same_recipes = []
+    for ingredient in same_ingredient:
+        same_recipes = Recipe.objects.filter(recipe_ingredients=int(ingredient))
+
+
     if (request.method == "POST"):
         recipe_main_article = Recipe.objects.get(id=request.POST["recipe_main_article"])
         recipe01 = Recipe.objects.get(id=request.POST["recipe-select-01"])
         recipe02 = Recipe.objects.get(id=request.POST["recipe-select-02"])
-        return render(request, "cookbook/homepage.html", {"recipe_main_article": recipe_main_article, "recipe01": recipe01, "recipe02": recipe02, "side_recipes": new_recipes})
+        return render(request, "cookbook/homepage.html", {"recipe_main_article": recipe_main_article, "recipe01": recipe01, "recipe02": recipe02, "side_recipes": new_recipes, "same_recipes": same_recipes} )
     else:     
-        return render(request, "cookbook/homepage.html", {"side_recipes": new_recipes})
+        return render(request, "cookbook/homepage.html", {"side_recipes": new_recipes, "same_recipes": same_recipes})
 
 def recipe_page(request, id, name):
     if (Recipe.objects.filter(id=id).exists()):
