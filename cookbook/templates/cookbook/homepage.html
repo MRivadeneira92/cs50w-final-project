@@ -13,7 +13,7 @@
     <section id="content-container" class="fade-op">
         <section class="section-container">
             <section id="main-left">
-                <article id="main-article">
+                <article id="main-article" class="cell-border">
                     {% if recipe_main_article %}
                     <a href="/{{recipe_main_article.id}}/hey" class="overlay-link">
                         <div class="recipe_main_image_container">
@@ -86,12 +86,12 @@
         </section>
 
         <!-- New recipes -->
-        <section id="new-recipes-container" >
+        <section id="new-recipes-container" class="mb-3">
             <h3>New recipes</h3>
             <div class="section-container">
                     {% for recipe in side_recipes %}
                     <div class="second-main-recipe-container">
-                        <div class='second-main-result-cell'>
+                        <div class='cell-border'>
                             <a href="/{{recipe.id}}/hey">
                                 <div class='second-result-img-container'>
                                     <img id='' src="{{recipe.recipe_image}}" alt='' class="recipe-img">
@@ -108,12 +108,12 @@
         </section>
 
         <!-- Recipes that used the same ingredients -->
-         <section id="same-recipes-container" >
+         <section id="same-recipes-container" class="mb-3">
             <h3>Cooking with Butter</h3>
             <div class="section-container">
                     {% for recipe in same_recipes %}
                     <div class="second-main-recipe-container">
-                        <div class='second-main-result-cell'>
+                        <div class='cell-border'>
                             <a href="/{{recipe.id}}/hey">
                                 <div class='second-result-img-container'>
                                     <img id='' src="{{recipe.recipe_image}}" alt='' class="recipe-img">

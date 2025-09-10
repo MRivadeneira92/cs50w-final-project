@@ -34,14 +34,13 @@ def index(request):
     for ingredient in same_ingredient:
         same_recipes = Recipe.objects.filter(recipe_ingredients=int(ingredient))
 
-
     if (request.method == "POST"):
         recipe_main_article = Recipe.objects.get(id=request.POST["recipe_main_article"])
         recipe01 = Recipe.objects.get(id=request.POST["recipe-select-01"])
         recipe02 = Recipe.objects.get(id=request.POST["recipe-select-02"])
-        return render(request, "cookbook/homepage.html", {"recipe_main_article": recipe_main_article, "recipe01": recipe01, "recipe02": recipe02, "side_recipes": new_recipes, "same_recipes": same_recipes} )
+        return render(request, "cookbook/homepage.html", {"recipe_main_article": recipe_main_article, "recipe01": recipe01, "recipe02": recipe02, "side_recipes": new_recipes, "same_recipes": same_recipes[0:4]} )
     else:     
-        return render(request, "cookbook/homepage.html", {"side_recipes": new_recipes, "same_recipes": same_recipes})
+        return render(request, "cookbook/homepage.html", {"side_recipes": new_recipes, "same_recipes": same_recipes[0:4]})
 
 def recipe_page(request, id, name):
     if (Recipe.objects.filter(id=id).exists()):
