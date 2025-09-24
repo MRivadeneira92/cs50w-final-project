@@ -210,7 +210,7 @@ function search_recipe() {
 function recipeContainer(dict) {
     let container = 
         `<div class='cell-container fade-in'>
-            <div class='result-cell'>
+            <div class='result-cell cell-border'>
                 <a href='/${dict['recipe_id']}/hey'>
                     <div class='result-img-container'>
                     <img id='${dict['recipe_id']}-img' src="${dict.recipe_image}" alt='' class="recipe-img">
