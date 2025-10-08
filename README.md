@@ -45,13 +45,17 @@ if (dataInput.value != "") {
 }
 ```
 
+The end result is an array with the words that will be used in the next step inside a variable called ```searchBarCont```.
+
 ## The search function ##
+
+Each word stored in ```searchBarCont``` is used as input in an search function that looks for both ingredients and recipes that matches or includes it. 
 
 The search function works two ways: The ingredient name triggers smaller functions within the bigger search funtion. First it looks for the _exact_ name, then for ingredients that contains the world (for example: inputting _egg_ will result in the ingredient _egg_ as an exact result and _egg whites_ as a similar result). After searching for ingredients the next step is looking for recipes that incorporate the name of the ingredient in their title (inputting _oats_ will get you as ingredients _oat flour_ and _Oats_, but also as recipes _oat_ meal pancakes and _Oat_ pizza crust). 
 
 ### First the ingredients ###
 
-The first step is looking for matching ingredients. This is handled by a fetch to ```get_igredients```. This functions takes the name of the ingredient as an input. An empty dictionary is created named ```result```. We use a dictionary because of the need of storing both _exact_ and _similar_ ingredients, recipes, and their corresponding data. The initial check is if the name appears inside the ingredient database. If the check is positive the next step is looking for the _exact_ ingredient: 
+A loop is used to go through ```searchBarCont```. Each iteration is feed to ```get_ingredients```. This functions takes a name as an input. An empty dictionary is created named ```result```. We use a dictionary because of the need of storing both _exact_ and _similar_ ingredients, recipes, and their corresponding data. The initial check is if the name appears inside the ingredient database. If the check is positive the next step is looking for the _exact_ ingredient: 
 
 ```
 if (Ingredient.objects.filter(ingredient_name=name).exists()): 
@@ -79,3 +83,87 @@ if (Ingredient.objects.filter(ingredient_name__icontains=name).exists()):
 ```
 
 The _exact_ name of the ingredient is excluded so the query doesn't return the same result the query from earlier. Because there can be multiple ingredients with a similar name the results of the query are stored in a ```list``` by looping the through this results. As in the previous query, the final product is stored in a key named _similar_. 
+
+The same function can look up recipes when the initial ingredients query is negative: 
+
+```
+if (Recipe.objects.filter(recipe_name=name)):
+    recipe = Recipe.objects.get(recipe_name=name)
+    result = {
+        "recipe_id": recipe.id,
+        "recipe_desc": recipe.recipe_description,
+        "recipe_name": str(recipe.recipe_name),
+        "recipe_type": str(recipe.recipe_type),
+        "steps": str(recipe.steps),
+        "recipe_time": recipe.recipe_time,
+        "recipe_image": str(recipe.recipe_image)
+    }
+    result["id"] = recipe.id
+    result["name"] = recipe.recipe_name
+
+    # look for similar results
+    if(Recipe.objects.filter(recipe_name__icontains=name).exists()):
+        result = {}
+        recipe = Recipe.objects.get(recipe_name__icontains=name)
+        result = {
+            "recipe_id": recipe.id,
+            "recipe_desc": recipe.recipe_description,
+            "recipe_name": str(recipe.recipe_name),
+            "recipe_type": str(recipe.recipe_type),
+            "steps": str(recipe.steps),
+            "recipe_time": recipe.recipe_time,
+            "recipe_image": str(recipe.recipe_image)
+        }
+        result["id"] = recipe.id
+        result["name"] = recipe.recipe_name
+        result["type"] = 0 # recipe
+```
+
+The logic for this queries are the same as for the ingredients.
+
+### Then the results ###
+
+The results are JSON parsed and stored in a dictionary. Results are separated between _exact_ and _similar_.
+
+The function now splits depending on the _type_ of result (if recipe or ingredient).
+
+If the results is a _recipe_ the data is presented in two ways. First the homepage is emptied by removing the HTML inside ```#results-cell-container```. Then the ingredient that triggered this recipe is inserted inside the ```#ingredients-result``` container. This container stores _exact_ recipe results. 
+
+In order to show the ingredients from the search a new function is called. ```ingredientContainer``` takes the _name_, _id_ and _relation_(exact or similar) and outputs an individual container for each ingredient. The user can delete any ingredient and the recipes on the page will be modified on real time. This works with a function called ```deleteIngredient``` stored inside the container with the ingredient data.  This new function takes the ```id``` and ```relation``` of the ingredient. Using the ```relation``` the function selects between ```ingredientIdListExact``` and ```ingredientIdListSimilar```. The _indexOf_ method find the posision fo the _id_ inside each corresponding list, this is stored in an variable called ```position``` and this number is used along with the method _splice_ to remove the _id_ fron the corresponding list of ingredients. 
+
+```
+if (relation == "exact") {
+    let position = ingredientIdListExact.indexOf(id);
+    ingredientIdListExact.splice(position,1);
+    ingDisplayList.splice(position,1);
+} else if (relation == "similar") {
+    let position = ingredientIdListSimilar.indexOf(id);
+    ingredientIdListSimilar.splice(position,1);
+    ingDisplayList.splice(position,1);
+}
+```
+
+After the data is removed ````seach_recipe()``` is triggered updating the recipes on screen. The remaining lines takes care of deleting the container with a fade-out.
+
+The recipes from the query are displayed using the function ```recipeContainer```. This function takes a _dictionary_ to fill the data inside the container. The function returns a html string. 
+
+```
+function recipeContainer(dict) {
+    let container = 
+        `<div class='cell-container fade-in'>
+            <div class='result-cell cell-border'>
+                <a href='/${dict['recipe_id']}/hey'>
+                    <div class='result-img-container'>
+                    <img id='${dict['recipe_id']}-img' src="${dict.recipe_image}" alt='' class="recipe-img">
+                    </div>
+                    <div class='result-text'>
+                        <p class='result-name' >${dict['recipe_name']}</p>
+                        <p style="font-style: italic;">${dict['recipe_time']}</p>
+                        <p class='result-description'>${dict['recipe_desc']}</p>
+                    </div>
+                </a>
+            </div>
+        </div>`
+    return container
+}
+```
