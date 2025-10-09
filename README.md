@@ -6,6 +6,10 @@ MICo (Missing Ingredients COokbook) is a site you can use when you don't know wh
 
 # How it works #
 
+## How data is stored ##
+
+In order for the page to be responsive the values of the first ingredient or recipe query is stored in two list declared during the page loading: _ingredientidListExact_ and _ingredientidListSimilar_. This lists can be modified in real time as the user removes or adds ingredients. This is accomplished by triggering the recipe search function when any of there two actions are done. The lists are modified accordinging and a new search is done, adapting the results on screen. 
+
 ## Getting values ##
 
 The search bar accepts one or multiple ingredients. The have to be separated by a comma. The raw data is stored on a variable called ```dataInput```. An if statements checks if the data contains more than one ingredient by looking for a comma or a comma and space characters. If they are detected a few lines of code split the words inside the variable by reading each character one by one and separating the words when the character is a blank space or a comma. The resulting word is stored in an array while a function makes sure that the first letter of the ingredient is uppercase. 
@@ -167,3 +171,41 @@ function recipeContainer(dict) {
     return container
 }
 ```
+
+Each container is displayed using a fade-in animation. 
+
+If the results are ingredients the data is separated with an if statement. The ingredients id is pushed to the corresponding list and the function _ingredientContainer()_ populates the div with the results. When there are similar results the div where they are placed is made visible.  
+
+```
+if (exactResults) {
+    ingredientIdListExact.push(exactResults['id']);
+    document.querySelector("#ingredients-result").innerHTML += ingredientContainer(exactResults['name'],exactResults['id'], "exact");
+    ingredientNameList.push(exactResults['name']);
+} 
+if ((Object.keys(similarResults).length > 0) == true) {
+    document.querySelector("#ingredients-results-similar-title").style.display = "block";
+    for (let j = 0; j < Object.keys(similarResults).length; j++) {
+        ingredientIdListSimilar.push(similarResults[j]['id'])
+        document.querySelector("#ingredients-results-similar").innerHTML += ingredientContainer(similarResults[j]['name'],similarResults[j]['id'], "similar");
+    }
+}
+```
+
+After everything is processed the function ```search_recipe()```  is triggered. 
+
+### The search_recipe() function ### 
+
+This functions makes a query to the view function _get_recipe_. It switches between exact and similar ingredients with a for loop. 
+
+Inside the _get_recipe_ function the ingredient list is turned into a list of ints and saved in a variable called _search_. The next step is to filter through the database of recipes. The function is build so the search becomes narrower each time a new ingredient is queried. This is accomplished with a for loop using _search_. The first query uses the ingredient in the first position of _search_. The second query is done on the results of the first query. The parsed recipes are stored in a variable called _final_results_ 
+
+```
+for i in range(len(search)):
+    if(recipe_query.filter(recipe_ingredients=search[i]).exists()): 
+        recipe_query = recipe_query.filter(recipe_ingredients = search[i])
+        no_result = False
+```
+_Each loop makes the search smaller_
+
+The final step is to turn the query into a dictionary that stores each recipe as a corresponding dictionary. 
+

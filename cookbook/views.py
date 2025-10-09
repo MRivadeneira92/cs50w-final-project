@@ -148,22 +148,11 @@ def get_recipe(request, id_list):
             no_result = False
             print("recipe_query: ", recipe_query)
 
-    final_results = list(final_results)
-    print("final_results: ", final_results)
-    # end search #
-    recipe_results = []
-    for i in range(len(final_results)):
-        if(recipe_query.filter(id=final_results[i])):
-            foo = recipe_query.filter(id=final_results[i])
-            recipe_results.append(foo[0])
-            no_result = False
-        
     if no_result:
         print("error")
         result = {"recipe_id": "None"}
         return JsonResponse(result)
     
-    print("recipe_results:" , recipe_results)
     # turn recipe_query into a list of recipes
     result = {}
     for i in range(len(recipe_query)):
