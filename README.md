@@ -10,6 +10,46 @@ MICo (Missing Ingredients COokbook) is a site you can use when you don't know wh
 
 In order for the page to be responsive the values of the first ingredient or recipe query is stored in two list declared during the page loading: _ingredientidListExact_ and _ingredientidListSimilar_. This lists can be modified in real time as the user removes or adds ingredients. This is accomplished by triggering the recipe search function when any of there two actions are done. The lists are modified accordinging and a new search is done, adapting the results on screen. 
 
+### The recipe model ###
+
+Here is the recipe model in its entirely: 
+
+```
+class Recipe(models.Model):
+    recipe_name = models.CharField(max_length=100)
+    recipe_description = models.CharField(max_length=60)
+    recipe_ingredients = models.ManyToManyField(Ingredient, blank=True)
+    recipe_ammounts = models.CharField(max_length=200)
+    recipe_type = models.ManyToManyField(Recipe_type)
+    steps = models.TextField(max_length=1000)
+    recipe_time = models.CharField(max_length=100)
+    recipe_image= models.ImageField(null=True, blank=True, upload_to="images/")
+    recipe_image_credit = models.CharField(max_length=200)
+```
+
+```recipe_name``` not only identifies each recipe, it is also used when searching for individual recipes. 
+
+```recipe_description``` is the information displayed in search results. Gives a small description of the dish.
+
+```recipe_ingredients``` are the ids of the ingredients in the database. That is why its field is a ```ManytoManyField```. This are the ids that are used by the search function to find the desired meal. 
+
+```recipe_ammounts``` is a string containing the ammounts and ingredients used in the recipe. The string is displayed as a unordered list in the recipe page. 
+
+Ingredients and ammounts are separated because ingredients id must be able to be located by the seach function. When a new recipe is added this process is done by the page itself. 
+
+```recipe_type``` is used to categorize each recipe.
+
+```steps``` is a string describing the method for preparing the meal.
+
+```recipe_time``` is a string used for displaying how much time the recipe takes to make. 
+
+```recipe_image``` stores an image for the recipe
+
+```recipe_image_credit``` is a string with the credit for the image.
+
+In order for ```searchRecipe()``` to be able to find the recipe using the ingredients is crusial that in each recipe model the ingredients are saved with the corresponding ids. This ids are saved in ```recipe_ingredients``` (hence a _ManytoManyField_). Most of these fields hold data that will later be used when displaying the recipe to the used or to give a preview of it when they are displayed on the results div. 
+
+
 ## Getting values ##
 
 The search bar accepts one or multiple ingredients. The have to be separated by a comma. The raw data is stored on a variable called ```dataInput```. An if statements checks if the data contains more than one ingredient by looking for a comma or a comma and space characters. If they are detected a few lines of code split the words inside the variable by reading each character one by one and separating the words when the character is a blank space or a comma. The resulting word is stored in an array while a function makes sure that the first letter of the ingredient is uppercase. 
@@ -133,8 +173,7 @@ The function now splits depending on the _type_ of result (if recipe or ingredie
 
 If the results is a _recipe_ the data is presented in two ways. First the homepage is emptied by removing the HTML inside ```#results-cell-container```. Then the ingredient that triggered this recipe is inserted inside the ```#ingredients-result``` container. This container stores _exact_ recipe results. 
 
-In order to show the ingredients from the search a new function is called. ```ingredientContainer``` takes the _name_, _id_ and _relation_(exact or similar) and outputs an individual container for each ingredient. The user can delete any ingredient and the recipes on the page will be modified on real time. This works with a function called ```deleteIngredient``` stored inside the container with the ingredient data.  This new function takes the ```id``` and ```relation``` of the ingredient. Using the ```relation``` the function selects between ```ingredientIdListExact``` and ```ingredientIdListSimilar```. The _indexOf_ method find the posision fo the _id_ inside each corresponding list, this is stored in an variable called ```position``` and this number is used along with the method _splice_ to remove the _id_ fron the corresponding list of ingredients. 
-
+In order to show the ingredients from the search a new function is called. ```ingredientContainer``` takes the _name_, _id_ and _relation_(exact or similar) and outputs an individual container for each ingredient. The user can delete any ingredient and the recipes on the page will be modified on real time. This works with a function called ```deleteIngredient()``` stored inside the container with the ingredient data.  
 ```
 if (relation == "exact") {
     let position = ingredientIdListExact.indexOf(id);
@@ -209,3 +248,49 @@ _Each loop makes the search smaller_
 
 The final step is to turn the query into a dictionary that stores each recipe as a corresponding dictionary. 
 
+_get_recipe_ returns a dictionary with the data of the recipes. The results are displayed on screen using a for loop with the length of the results. On each loop _recipeContainer()_ creates the final display of each recipe. 
+
+## Updating in real time ## 
+
+Missing ingredient Cookbook allows the user to change the results dinamically. After the results are displayed the user can add more ingredients to the original search or delete ingredients, bot actions will activate the search function. 
+
+### Removing ingredients ###
+
+Any time an ingredient container is clicked the function _deleteIngredient()_ is triggered. This function takes two inputs: _id_ of the recipe and the _relation_ wit the query (if is exact or similar). Using the ```relation``` the function selects between ```ingredientIdListExact``` and ```ingredientIdListSimilar```. The _indexOf_ method find the posision fo the _id_ inside each corresponding list, this is stored in an variable called ```position``` and this number is used along with the method _splice_ to remove the _id_ fron the corresponding list of ingredients.
+
+```
+if (relation == "exact") {
+    let position = ingredientIdListExact.indexOf(id);
+    ingredientIdListExact.splice(position,1);
+    ingDisplayList.splice(position,1);
+} else if (relation == "similar") {
+    let position = ingredientIdListSimilar.indexOf(id);
+    ingredientIdListSimilar.splice(position,1);
+    ingDisplayList.splice(position,1);
+}
+```
+_Removing from id list_
+
+The container is first made invisible with a fade-out and removed after a second. The final lines check if the _similar ingredients_ container is empty. If it is true, the divs display is set to ```none```.
+
+# Adding new recipes #
+
+## The add recipes page ##
+
+The _add_ serves to incorporate new recipes and ingredients into the database. In _views_ a recipe form is created: 
+
+```
+class NewRecipeForm(forms.Form): 
+    Name = forms.CharField(max_length=100)
+    Description = forms.CharField(max_length=200)
+    Time = forms.CharField(max_length=100)
+    Ingredients = forms.CharField(max_length=200)
+    Type = forms.ModelMultipleChoiceField(queryset=Recipe_type.objects.all())
+    Steps = forms.CharField(widget=forms.Textarea)
+    Image = forms.ImageField()
+```
+_The form that will be displayed later_ 
+
+The form closely relates to the recipe model but with a key diference. Both ```recipe_ingredients``` and ```recipe_ammounts``` are handled by the ```Ingredients```field in the form. The separation between the two is done inside the _add()_ function. 
+
+When the _add_ url first visited the form is added as an argument to the render function. On the add template the function is rendered with a variable called form and CSS inside a _form_ tag. Also inside this tag are two django tags used for displayin errors when during form processing: _error_ when one of the ingredients does not exist and _Message_ to show any other error. 
