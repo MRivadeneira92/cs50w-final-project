@@ -277,7 +277,11 @@ The container is first made invisible with a fade-out and removed after a second
 
 ## The add recipes page ##
 
-The _add_ serves to incorporate new recipes and ingredients into the database. In _views_ a recipe form is created: 
+The _add_ page serves to incorporate new recipes and ingredients into the database. The function works two ways: with a GET request the page is rendered using an empty recipe form, else if in handles an POST request, the new recipe form is processed. First lets look at the new recipe form: 
+
+### NewRecipeForm() ###
+
+In _views_ a recipe form is created: 
 
 ```
 class NewRecipeForm(forms.Form): 
@@ -293,4 +297,8 @@ _The form that will be displayed later_
 
 The form closely relates to the recipe model but with a key diference. Both ```recipe_ingredients``` and ```recipe_ammounts``` are handled by the ```Ingredients```field in the form. The separation between the two is done inside the _add()_ function. 
 
-When the _add_ url first visited the form is added as an argument to the render function. On the add template the function is rendered with a variable called form and CSS inside a _form_ tag. Also inside this tag are two django tags used for displayin errors when during form processing: _error_ when one of the ingredients does not exist and _Message_ to show any other error. 
+When the _add_ url first visited the form is added as an argument to the render function. On the _add_ template, the function is rendered with a variable called _form_ and CSS inside a _form_ tag. Also inside this tag are two django tags used for displayin errors during form processing: _error_ when one of the ingredients does not exist and _Message_ to show any other error. 
+
+## Filling the form ##
+
+In order to process the ingredients the new recipe forms uses a format that allows the _add()_ function to read its ingredients and ammounts correctly. 
