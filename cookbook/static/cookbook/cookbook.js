@@ -163,6 +163,12 @@ document.addEventListener('DOMContentLoaded', () => {
             infoDisplay = false;
         }
     })
+
+    document.querySelector("#ing-suggestion").addEventListener("keydown", function(event) {
+        if (event.keyCode === 13) {
+            document.getElementById("#btn-ing-suggestion").click();
+        }
+    })
 })
 
 /* functions */
@@ -342,3 +348,20 @@ function fadeIn(id) {
         document.querySelector(id).classList.remove("fade-in")
     }, 600)
 }
+
+
+function ingName() {
+    let ingLabel = document.querySelector("#ing-suggestion-label").innerHTML;
+    let ingSuggestion = document.querySelector("#ing-suggestion");
+    console.log(ingLabel);
+    if (ingLabel == "Ammount") {
+        document.querySelector("#id_Ingredients").value += ingSuggestion.value + ":";
+        ingSuggestion.value = "";
+        document.querySelector("#ing-suggestion-label").innerHTML = "Ingredient";
+    }
+    if (ingLabel == "Ingredient") {
+        document.querySelector("#id_Ingredients").value += ingSuggestion.value + ",";
+        document.querySelector("#ing-suggestion-label").innerHTML = "Ammount";
+        ingSuggestion.value = "";
+    }
+    }

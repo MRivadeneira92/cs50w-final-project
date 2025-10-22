@@ -14,23 +14,18 @@
             {% endif %}
             <button type="submit" class="button-style">Submit</button>
         </form>
-        <p>Format for adding ingredients: "ammmount: ingredient, ammount: ingredient" Ej: 1 cup: sugar, 2 oz: chocolate</p>
-        
-        <label for="ing-suggestion">Ingredient</label>
-        <input id="ing-suggestion" type="text" list="ing-database">
-        <datalist id="ing-database">
-            {% for ingredient in ingredients %}
-            <option value="{{ingredient.ingredient_name}}"></option>
-            {% endfor %}
-        </datalist>
-        <div style="height:200px;overflow:auto">
-            <ul>
+        <p>Format for adding ingredients: "ammount: ingredient, ammount: ingredient" Ej: 1 cup: sugar, 2 oz: chocolate</p>
+        <div>
+            <label id="ing-suggestion-label" for="ing-suggestion">Ammount</label>
+            <input id="ing-suggestion" type="text" list="ing-database">
+            <button id="btn-ing-suggestion" onclick="ingName()">Ok</button>
+            <datalist id="ing-database">
                 {% for ingredient in ingredients %}
-                <li>{{ ingredient.ingredient_name }}</li>
+                    <option value="{{ingredient.ingredient_name}}"></option>
                 {% endfor %}
-    
-            </ul> 
+            </datalist>
         </div>
+
     </section>
 {% endblock %}
 
