@@ -16,9 +16,11 @@
         </form>
         <p>Format for adding ingredients: "ammount: ingredient, ammount: ingredient" Ej: 1 cup: sugar, 2 oz: chocolate</p>
         <div>
+            <p>Ingredients</p>
             <label id="ing-suggestion-label" for="ing-suggestion">Ammount</label>
             <input id="ing-suggestion" type="text" list="ing-database">
             <button id="btn-ing-suggestion" onclick="ingName()">Ok</button>
+            <ul id="ing-table"></ul>
             <datalist id="ing-database">
                 {% for ingredient in ingredients %}
                     <option value="{{ingredient.ingredient_name}}"></option>

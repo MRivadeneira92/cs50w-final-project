@@ -353,15 +353,22 @@ function fadeIn(id) {
 function ingName() {
     let ingLabel = document.querySelector("#ing-suggestion-label").innerHTML;
     let ingSuggestion = document.querySelector("#ing-suggestion");
-    console.log(ingLabel);
     if (ingLabel == "Ammount") {
         document.querySelector("#id_Ingredients").value += ingSuggestion.value + ":";
+        let newItem = "<li onclick='addDeleteIngredient(event)'>" + ingSuggestion.value + " " +"</li>";
+        document.querySelector("#ing-table").innerHTML += newItem;
         ingSuggestion.value = "";
         document.querySelector("#ing-suggestion-label").innerHTML = "Ingredient";
     }
     if (ingLabel == "Ingredient") {
         document.querySelector("#id_Ingredients").value += ingSuggestion.value + ",";
         document.querySelector("#ing-suggestion-label").innerHTML = "Ammount";
+        document.querySelector("#ing-table").lastChild.innerHTML += ingSuggestion.value + " " + "<span id='closeIng'>x</span>";
         ingSuggestion.value = "";
     }
-    }
+}
+
+function addDeleteIngredient(event) {
+    var target = event.target;
+    target.remove();
+}

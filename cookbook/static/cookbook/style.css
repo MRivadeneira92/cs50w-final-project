@@ -517,6 +517,10 @@ form button {
     flex-direction: row;
 }
 
+#ing-table li {
+    cursor: pointer;
+}
+
 /* animations */
 
 @keyframes results-fadein {
